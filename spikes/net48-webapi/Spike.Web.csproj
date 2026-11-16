@@ -9,8 +9,11 @@
     <GeneratedBindingRedirectsAction>Overwrite</GeneratedBindingRedirectsAction>
   </PropertyGroup>
 
-  <!-- Off Windows there is no Visual Studio, so compile without the IIS layout and publish targets. -->
-  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+  <!--
+    The .NET SDK (dotnet build / dotnet test) has no web application targets on any OS, so compile without
+    the IIS layout and publish targets. Visual Studio's msbuild.exe ('Full') keeps the real ones.
+  -->
+  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
     <WebApplicationsTargetPath>$(MSBuildThisFileDirectory)NoWebApplicationTargets.targets</WebApplicationsTargetPath>
   </PropertyGroup>
 

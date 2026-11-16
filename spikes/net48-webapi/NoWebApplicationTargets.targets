@@ -1,7 +1,7 @@
 <Project>
   <!--
-    Stand-in for Visual Studio's Microsoft.WebApplication.targets, which does not exist on macOS or Linux.
+    Stand-in for Visual Studio's Microsoft.WebApplication.targets, which the .NET SDK does not ship.
     That file only lays out and publishes the site for IIS; compiling does not need it.
-    Windows builds (CI runners, packaging) use the real file from Visual Studio Build Tools.
+    Builds with Visual Studio's msbuild.exe (CI packaging) use the real file.
   -->
 </Project>
