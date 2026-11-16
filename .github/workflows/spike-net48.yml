@@ -1,0 +1,74 @@
+# Phase 0.3 spike: prove the net48 code builds and tests on GitHub's Windows runners.
+# Throwaway; replaced by ci.yml in Phase 3.
+name: spike-net48
+
+on:
+  pull_request:
+    paths:
+      - "spikes/**"
+      - ".github/workflows/spike-net48.yml"
+  push:
+    branches: [main]
+    paths:
+      - "spikes/**"
+      - ".github/workflows/spike-net48.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spike-net48-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test against SQL Server 2019
+    # Matches the legacy server's OS; windows-latest is Windows Server 2025.
+    runs-on: windows-2022
+    timeout-minutes: 30
+    env:
+      SPIKE_SQL_CONNECTION: Server=localhost;Database=Spike;Integrated Security=true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install SQL Server 2019 Developer
+        uses: potatoqualitee/mssqlsuite@bc850f242e5fe551e36cea6fa4bed608c58fa489 # v2
+        with:
+          install: sqlengine
+          version: 2019
+
+      - name: Show the SQL Server version
+        run: sqlcmd -S localhost -E -b -Q "SELECT @@VERSION; SELECT SERVERPROPERTY('Edition') AS Edition;"
+
+      - name: Create the database and load the stored procedure
+        run: |
+          sqlcmd -S localhost -E -b -Q "CREATE DATABASE Spike;"
+          sqlcmd -S localhost -E -b -d Spike -i spikes/database/usp_RoundAmount.sql
+
+      - name: Run the tests
+        run: dotnet test spikes/net48-webapi.Tests/Spike.Web.Tests.csproj --configuration Release --logger "console;verbosity=normal"
+
+  iis-build:
+    name: Build with Visual Studio MSBuild
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build with the real web application targets
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $msbuild = & $vswhere -latest -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
+          if (-not $msbuild) { throw "MSBuild.exe not found" }
+          Write-Host "MSBuild: $msbuild"
+
+          $project = 'spikes/net48-webapi/Spike.Web.csproj'
+          & $msbuild $project /restore /p:Configuration=Release /v:minimal /nologo
+          if ($LASTEXITCODE -ne 0) { throw "Build failed" }
+
+          $targets = (& $msbuild $project -getProperty:WebApplicationsTargetPath /nologo).Trim()
+          Write-Host "WebApplicationsTargetPath: $targets"
+          if ($targets -like '*NoWebApplicationTargets*') { throw "The stub was used instead of Visual Studio's targets" }
+          if (-not (Test-Path $targets)) { throw "Web application targets not found at $targets" }
