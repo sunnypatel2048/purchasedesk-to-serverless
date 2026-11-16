@@ -1,0 +1,54 @@
+# --- Secrets and personal values -------------------------------------------
+# Never committed: account IDs, email and IP addresses, application secrets.
+.env
+.env.*
+!.env.example
+
+# Backend settings contain the AWS account ID; only the .example is committed.
+infra/**/backend.hcl
+# Variable values (personal details); only .example files are committed.
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+*.pkrvars.hcl
+!*.pkrvars.hcl.example
+
+# --- Terraform --------------------------------------------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+# Saved plans contain account IDs and IPs.
+tfplan
+*.tfplan
+.terraform.lock.hcl.bak
+crash.log
+crash.*.log
+
+# --- Packer -----------------------------------------------------------------
+packer_cache/
+
+# --- .NET -------------------------------------------------------------------
+bin/
+obj/
+TestResults/
+packages/
+artifacts/
+publish/
+*.user
+*.suo
+*.DotSettings.user
+.vs/
+
+# --- Editors and OS ---------------------------------------------------------
+.idea/
+.vscode/
+.DS_Store
+
+# --- Local scan output ------------------------------------------------------
+.scan/
+
+# --- Working files (not part of the project) --------------------------------
+# Personal working notes (session runbooks, scratch).
+notes/
+# Output of make up / make down.
+logs/
