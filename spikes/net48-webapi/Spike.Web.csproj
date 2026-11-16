@@ -12,9 +12,11 @@
   <!--
     The .NET SDK (dotnet build / dotnet test) has no web application targets on any OS, so compile without
     the IIS layout and publish targets. Visual Studio's msbuild.exe ('Full') keeps the real ones.
+    MvcBuildViews (on by default in Release) runs the AspNetCompiler task, which also exists only in msbuild.exe.
   -->
   <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
     <WebApplicationsTargetPath>$(MSBuildThisFileDirectory)NoWebApplicationTargets.targets</WebApplicationsTargetPath>
+    <MvcBuildViews>false</MvcBuildViews>
   </PropertyGroup>
 
   <ItemGroup>
