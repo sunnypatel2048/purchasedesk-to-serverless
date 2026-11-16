@@ -1,0 +1,21 @@
+<Project Sdk="MSBuild.SDK.SystemWeb/4.0.107">
+
+  <!-- Phase 0.2 spike: proves a .NET Framework 4.8 Web API 2 project compiles with dotnet build on macOS. -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <RootNamespace>Spike.Web</RootNamespace>
+    <LangVersion>7.3</LangVersion>
+    <!-- IIS reads binding redirects from Web.config, so write them there rather than to a side file. -->
+    <GeneratedBindingRedirectsAction>Overwrite</GeneratedBindingRedirectsAction>
+  </PropertyGroup>
+
+  <!-- Off Windows there is no Visual Studio, so compile without the IIS layout and publish targets. -->
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <WebApplicationsTargetPath>$(MSBuildThisFileDirectory)NoWebApplicationTargets.targets</WebApplicationsTargetPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
+  </ItemGroup>
+
+</Project>
