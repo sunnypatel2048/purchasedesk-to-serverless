@@ -25,6 +25,9 @@ Use SQL Server 2019, Developer edition, at build 15.0.4470.1 (CU32 GDR, KB509040
 - CU32 is SQL Server 2019's final cumulative update, so the pin will not drift.
 - Developer edition is licensed for non-production use only, which fits a demo with synthetic data.
 - One version means a behaviour difference found locally is the same one DMS and the parity tests see.
+- CI still installs 2019 RTM. In Phase 1.6 the two builds differed once: creating an order whose line Sku is longer
+  than its column failed on RTM with a deadlock (1205) and on CU32 with a truncation error (2629, with 8061). The API
+  answers 500 either way, so the golden files are unaffected. CI moves to CU32 if a difference ever reaches a client.
 
 ## Alternatives considered
 
