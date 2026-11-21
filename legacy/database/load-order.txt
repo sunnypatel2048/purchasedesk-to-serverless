@@ -1,0 +1,16 @@
+# Database scripts in load order, relative to legacy/database/.
+# dev.sh, Windows CI and the EC2 boot script all load from this list, so they cannot drift apart.
+#
+# Run once, against an empty server:
+00-create-database.sql
+01-schema.sql
+02-seed.sql
+# rerunnable: everything below is safe to run again on a loaded database
+03-types.sql
+procedures/usp_ListSuppliers.sql
+procedures/usp_GetSupplier.sql
+procedures/usp_SearchPurchaseOrders.sql
+procedures/usp_GetPurchaseOrder.sql
+procedures/usp_CreatePurchaseOrder.sql
+procedures/usp_SetPurchaseOrderStatus.sql
+procedures/usp_ExportApprovedOrders.sql
