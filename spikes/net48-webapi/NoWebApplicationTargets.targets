@@ -1,7 +1,0 @@
-<Project>
-  <!--
-    Stand-in for Visual Studio's Microsoft.WebApplication.targets, which the .NET SDK does not ship.
-    That file only lays out and publishes the site for IIS; compiling does not need it.
-    Builds with Visual Studio's msbuild.exe (CI packaging) use the real file.
-  -->
-</Project>
