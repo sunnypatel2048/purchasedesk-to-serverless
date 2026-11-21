@@ -42,6 +42,7 @@ jobs:
           version: 2019
 
       - name: Load the database from load-order.txt
+        id: load
         run: |
           $ErrorActionPreference = 'Stop'
           Get-Content legacy/database/load-order.txt |
@@ -63,15 +64,34 @@ jobs:
           if ($diff) { $diff | Format-Table -AutoSize | Out-String | Write-Host; throw "Seed facts differ from seed-expected.txt" }
           Write-Host "RESULT seed-facts identical to seed-expected.txt ($($expected.Count) facts)"
 
+      # First on the fresh database: the golden scenarios assume the next order id is 2001 and no orders beyond the
+      # seed. Everything recorded goes to artifacts/golden-actual, uploaded below whether this passes or not.
+      - name: Golden-file characterization tests
+        if: ${{ !cancelled() && steps.load.outcome == 'success' }}
+        env:
+          GOLDEN_ACTUAL_DIR: ${{ github.workspace }}\artifacts\golden-actual
+        run: dotnet test legacy/PurchaseDesk.Tests/PurchaseDesk.Tests.csproj --configuration Release --filter "Category=Golden" --logger "console;verbosity=normal"
+
       - name: Procedure tests
+        if: ${{ !cancelled() && steps.load.outcome == 'success' }}
         run: |
           $out = sqlcmd -S localhost -E -b -d PurchaseDesk -h -1 -W -i legacy/database/checks/procedure-tests.sql
           if ($LASTEXITCODE -ne 0) { throw "procedure-tests.sql failed" }
           $out | Where-Object { $_.Trim() } | ForEach-Object { Write-Host $_ }
           if ($out -match 'status=FAIL') { throw "Procedure tests failed" }
 
-      - name: API smoke tests
-        run: dotnet test legacy/PurchaseDesk.Tests/PurchaseDesk.Tests.csproj --configuration Release --logger "console;verbosity=normal"
+      - name: API smoke and export tests
+        if: ${{ !cancelled() && steps.load.outcome == 'success' }}
+        run: dotnet test legacy/PurchaseDesk.Tests/PurchaseDesk.Tests.csproj --configuration Release --filter "Category!=Golden" --logger "console;verbosity=normal"
+
+      - name: Upload what the golden tests recorded
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: golden-actual
+          path: artifacts/golden-actual
+          if-no-files-found: warn
+          retention-days: 14
 
   iis-build:
     name: Build with Visual Studio MSBuild (IIS layout)

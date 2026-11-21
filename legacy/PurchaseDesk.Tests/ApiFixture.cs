@@ -33,6 +33,9 @@ namespace PurchaseDesk.Tests
 
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
+            // In-memory requests count as local, and Web API shows local callers exception details. Real clients
+            // reach IIS remotely and never see them, so the tests (and the golden files) see what they would.
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
             config.EnsureInitialized();
             _server = new HttpServer(config);
 
