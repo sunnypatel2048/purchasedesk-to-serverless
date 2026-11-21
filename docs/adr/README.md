@@ -14,3 +14,4 @@ Format: [Michael Nygard's ADR template](https://cognitect.com/blog/2011/11/15/do
 | [0006](0006-lambda-dotnet10-arm64.md) | Lambda on the .NET 10 managed runtime, arm64, as the target compute |
 | [0007](0007-terraform-three-layers.md) | Terraform in three layers: bootstrap, image and platform |
 | [0008](0008-prebuilt-windows-image.md) | A pre-built Windows image, made with Packer |
+| [0009](0009-golden-files-define-equivalent.md) | Recorded legacy responses (golden files) define "equivalent" |

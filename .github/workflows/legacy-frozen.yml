@@ -1,0 +1,41 @@
+# legacy/ and golden/ are frozen at the legacy-v1 tag: the legacy application is the "before" of the migration and
+# its recorded responses are the definition of "equivalent". Only a fix for a broken build may change them, and the
+# pull request must carry the legacy-build-fix label.
+name: legacy-frozen
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  frozen:
+    name: legacy/ and golden/ are frozen
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Fail if frozen paths changed without the legacy-build-fix label
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HAS_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'legacy-build-fix') }}
+        run: |
+          changed="$(git diff --name-only "$BASE_SHA...$HEAD_SHA" -- legacy golden)"
+          if [ -z "$changed" ]; then
+            echo "RESULT legacy-frozen no changes to legacy/ or golden/"
+            exit 0
+          fi
+          echo "Changed frozen files:"
+          echo "$changed"
+          if [ "$HAS_LABEL" = "true" ]; then
+            echo "RESULT legacy-frozen allowed: labelled legacy-build-fix"
+            exit 0
+          fi
+          echo "::error::legacy/ and golden/ are frozen at legacy-v1. Only a fix for a broken build may change them, with the legacy-build-fix label."
+          exit 1
