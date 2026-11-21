@@ -3,7 +3,8 @@
 #
 #   legacy/database/dev.sh up       start SQL Server and load the scripts into an empty PurchaseDesk database
 #   legacy/database/dev.sh reset    wipe everything and load again from scratch
-#   legacy/database/dev.sh check    verify the schema; one RESULT line per check, non-zero exit on failure
+#   legacy/database/dev.sh check    verify schema and seed data; one RESULT line per check, non-zero exit on failure
+#   legacy/database/dev.sh facts    print the seed facts compared by check (counts, planted traits, fingerprints)
 #   legacy/database/dev.sh sql ...  run sqlcmd inside the container, e.g. dev.sh sql -Q "SELECT 1"
 #   legacy/database/dev.sh down     stop and remove the container and its data
 set -euo pipefail
@@ -81,15 +82,30 @@ check() {
     ROLLBACK TRANSACTION;
     SELECT CASE WHEN @before <> @after THEN 'changed' ELSE 'unchanged' END;" PurchaseDesk)"
 
+  # Seed data: every fact must match seed-expected.txt exactly (counts, planted traits, fingerprints).
+  # Fetched once, before the loop: docker compose exec would otherwise read the loop's stdin.
+  local all name expected actual
+  all="$(facts)"
+  while read -r -u 3 name expected; do
+    actual="$(awk -v n="$name" '$1 == n { print $2 }' <<<"$all")"
+    result "seed-$name" "$expected" "${actual:-missing}"
+  done 3< seed-expected.txt
+
   echo "RESULT summary failed=$failures"
   [[ $failures -eq 0 ]]
+}
+
+# Prints the seed facts ("name value" per line). Pin a deliberate seed change with: dev.sh facts > seed-expected.txt
+facts() {
+  sql -d PurchaseDesk -h -1 -W -i /db/checks/seed-facts.sql
 }
 
 case "${1:-}" in
   up) up ;;
   reset) docker compose down --volumes >/dev/null 2>&1 || true; up ;;
   check) check ;;
+  facts) facts ;;
   sql) shift; sql "$@" ;;
   down) docker compose down --volumes ;;
-  *) echo "usage: $0 up|reset|check|sql|down" >&2; exit 2 ;;
+  *) echo "usage: $0 up|reset|check|facts|sql|down" >&2; exit 2 ;;
 esac
