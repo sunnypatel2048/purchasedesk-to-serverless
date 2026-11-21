@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/purchase-orders/2001/approve",
+    "body": {
+      "DecidedBy": "golden.approver",
+      "Version": "AAAAAAAAF4M="
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 2001,
+      "OrderNumber": "PO-002001",
+      "SupplierId": 1,
+      "SupplierCode": "S001",
+      "SupplierName": "Evergreen Electrical Partners",
+      "Status": "Approved",
+      "OrderDate": "<now>",
+      "RequiredBy": null,
+      "Notes": "Golden scenario",
+      "TotalAmount": 6.7500,
+      "CreatedBy": "golden.test",
+      "DecidedBy": "golden.approver",
+      "DecidedAt": "<now>",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-GOLD-1",
+          "Description": "Half-cent golden line",
+          "Quantity": 1,
+          "UnitPrice": 2.3450,
+          "DiscountPercent": 0.00,
+          "LineAmount": 2.3500
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-GOLD-2",
+          "Description": "Discounted golden line",
+          "Quantity": 3,
+          "UnitPrice": 1.6750,
+          "DiscountPercent": 12.50,
+          "LineAmount": 4.4000
+        }
+      ]
+    }
+  }
+}

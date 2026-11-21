@@ -1,0 +1,336 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/suppliers"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": [
+      {
+        "Id": 49,
+        "Code": "S049",
+        "Name": "Ångström Labs",
+        "Email": "s049@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 28,
+        "Code": "S028",
+        "Name": "Atlas Chemicals Partners",
+        "Email": "s028@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 42,
+        "Code": "S042",
+        "Name": "Atlas Chemicals Partners",
+        "Email": "s042@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 30,
+        "Code": "S030",
+        "Name": "Atlas Industrial Partners",
+        "Email": "s030@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 24,
+        "Code": "S024",
+        "Name": "Atlas Logistics Inc",
+        "Email": "s024@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 5,
+        "Code": "S005",
+        "Name": "Atlas Office Inc",
+        "Email": "s005@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 38,
+        "Code": "S038",
+        "Name": "Atlas Packaging Inc",
+        "Email": "s038@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 20,
+        "Code": "S020",
+        "Name": "Beacon Electrical Ltd",
+        "Email": "s020@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 4,
+        "Code": "S004",
+        "Name": "Beacon Office Ltd",
+        "Email": "s004@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 17,
+        "Code": "S017",
+        "Name": "Beacon Tools Supply Co",
+        "Email": "s017@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 8,
+        "Code": "S008",
+        "Name": "Cedar Industrial Supply Co",
+        "Email": "s008@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 12,
+        "Code": "S012",
+        "Name": "Cedar Logistics Ltd",
+        "Email": null,
+        "IsActive": true
+      },
+      {
+        "Id": 26,
+        "Code": "S026",
+        "Name": "Cedar Logistics Partners",
+        "Email": "s026@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 21,
+        "Code": "S021",
+        "Name": "Cedar Tools Inc",
+        "Email": "s021@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 6,
+        "Code": "S006",
+        "Name": "Delta Industrial Ltd",
+        "Email": "s006@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 15,
+        "Code": "S015",
+        "Name": "Delta Industrial Partners",
+        "Email": "s015@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 36,
+        "Code": "S036",
+        "Name": "Delta Packaging Inc",
+        "Email": "s036@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 10,
+        "Code": "S010",
+        "Name": "Delta Tools Supply Co",
+        "Email": "s010@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 9,
+        "Code": "S009",
+        "Name": "Evergreen Chemicals Supply Co",
+        "Email": "s009@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 1,
+        "Code": "S001",
+        "Name": "Evergreen Electrical Partners",
+        "Email": "s001@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 44,
+        "Code": "S044",
+        "Name": "Evergreen Electrical Partners",
+        "Email": "s044@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 37,
+        "Code": "S037",
+        "Name": "Evergreen Industrial Inc",
+        "Email": "s037@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 35,
+        "Code": "S035",
+        "Name": "Falcon Industrial Supply Co",
+        "Email": "s035@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 34,
+        "Code": "S034",
+        "Name": "Falcon Logistics Supply Co",
+        "Email": null,
+        "IsActive": true
+      },
+      {
+        "Id": 22,
+        "Code": "S022",
+        "Name": "Granite Electrical Partners",
+        "Email": "s022@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 32,
+        "Code": "S032",
+        "Name": "Granite Electrical Partners",
+        "Email": "s032@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 31,
+        "Code": "S031",
+        "Name": "Granite Office Partners",
+        "Email": "s031@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 27,
+        "Code": "S027",
+        "Name": "Harbor Office Partners",
+        "Email": "s027@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 41,
+        "Code": "S041",
+        "Name": "Harbor Tools Inc",
+        "Email": "s041@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 39,
+        "Code": "S039",
+        "Name": "Ironwood Industrial Partners",
+        "Email": "s039@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 11,
+        "Code": "S011",
+        "Name": "Ironwood Office Supply Co",
+        "Email": "s011@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 40,
+        "Code": "S040",
+        "Name": "Ironwood Packaging Inc",
+        "Email": "s040@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 14,
+        "Code": "S014",
+        "Name": "Ironwood Safety Ltd",
+        "Email": "s014@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 7,
+        "Code": "S007",
+        "Name": "Juniper Chemicals Ltd",
+        "Email": "s007@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 18,
+        "Code": "S018",
+        "Name": "Juniper Electrical Inc",
+        "Email": "s018@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 16,
+        "Code": "S016",
+        "Name": "Juniper Industrial Inc",
+        "Email": "s016@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 43,
+        "Code": "S043",
+        "Name": "Juniper Office Supply Co",
+        "Email": "s043@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 23,
+        "Code": "S023",
+        "Name": "Juniper Packaging Inc",
+        "Email": "s023@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 19,
+        "Code": "S019",
+        "Name": "Juniper Safety Partners",
+        "Email": "s019@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 33,
+        "Code": "S033",
+        "Name": "Juniper Safety Supply Co",
+        "Email": "s033@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 3,
+        "Code": "S003",
+        "Name": "Juniper Tools Ltd",
+        "Email": null,
+        "IsActive": true
+      },
+      {
+        "Id": 47,
+        "Code": "S047",
+        "Name": "Müller GmbH",
+        "Email": "s047@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 45,
+        "Code": "S045",
+        "Name": "Northwind Traders",
+        "Email": "s045@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 46,
+        "Code": "S046",
+        "Name": "northwind traders",
+        "Email": "s046@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 48,
+        "Code": "S048",
+        "Name": "Société Fournitures",
+        "Email": "s048@example.com",
+        "IsActive": true
+      },
+      {
+        "Id": 50,
+        "Code": "S050",
+        "Name": "zeta Components",
+        "Email": "s050@example.com",
+        "IsActive": true
+      }
+    ]
+  }
+}

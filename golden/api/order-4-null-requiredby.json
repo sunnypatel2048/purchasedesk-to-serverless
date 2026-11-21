@@ -1,0 +1,93 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/4"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 4,
+      "OrderNumber": "PO-000004",
+      "SupplierId": 24,
+      "SupplierCode": "S024",
+      "SupplierName": "Atlas Logistics Inc",
+      "Status": "Pending",
+      "OrderDate": "2026-01-06T00:01:11",
+      "RequiredBy": null,
+      "Notes": null,
+      "TotalAmount": 16806.9000,
+      "CreatedBy": "p.oconnor",
+      "DecidedBy": null,
+      "DecidedAt": null,
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0294",
+          "Description": "Cable ties, pack of 5",
+          "Quantity": 27,
+          "UnitPrice": 41.9900,
+          "DiscountPercent": 10.00,
+          "LineAmount": 1020.3600
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-0230",
+          "Description": "Degreaser 5L, pack of 15",
+          "Quantity": 32,
+          "UnitPrice": 4.4100,
+          "DiscountPercent": 5.00,
+          "LineAmount": 134.0600
+        },
+        {
+          "LineNumber": 3,
+          "Sku": "SKU-0257",
+          "Description": "Drill bits, pack of 20",
+          "Quantity": 2,
+          "UnitPrice": 183.3800,
+          "DiscountPercent": 0.00,
+          "LineAmount": 366.7600
+        },
+        {
+          "LineNumber": 4,
+          "Sku": "SKU-0079",
+          "Description": "Fuse 10A, pack of 45",
+          "Quantity": 40,
+          "UnitPrice": 247.6900,
+          "DiscountPercent": 7.50,
+          "LineAmount": 9164.5300
+        },
+        {
+          "LineNumber": 5,
+          "Sku": "SKU-0383",
+          "Description": "Nitrile gloves, pack of 15",
+          "Quantity": 12,
+          "UnitPrice": 38.6300,
+          "DiscountPercent": 0.00,
+          "LineAmount": 463.5600
+        },
+        {
+          "LineNumber": 6,
+          "Sku": "SKU-0153",
+          "Description": "Nitrile gloves, pack of 5",
+          "Quantity": 40,
+          "UnitPrice": 32.4200,
+          "DiscountPercent": 0.00,
+          "LineAmount": 1296.8000
+        },
+        {
+          "LineNumber": 7,
+          "Sku": "SKU-0019",
+          "Description": "Fuse 10A, pack of 10",
+          "Quantity": 39,
+          "UnitPrice": 127.7900,
+          "DiscountPercent": 12.50,
+          "LineAmount": 4360.8300
+        }
+      ]
+    }
+  }
+}

@@ -1,3 +1,7 @@
 # Normalise text to LF in the repository. Windows runners check text out as CRLF; scripts must stay LF.
 * text=auto
 *.sh text eol=lf
+# Golden files: the recorded export CSVs are compared byte for byte (Windows-1252, CRLF), so never convert them;
+# golden JSON is kept LF everywhere.
+golden/**/*.csv -text
+golden/**/*.json text eol=lf

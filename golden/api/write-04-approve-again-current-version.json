@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/purchase-orders/2001/approve",
+    "body": {
+      "DecidedBy": "golden.approver",
+      "Version": "AAAAAAAAF4Q="
+    }
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Message": "Only a Pending purchase order can be approved or rejected."
+    }
+  }
+}

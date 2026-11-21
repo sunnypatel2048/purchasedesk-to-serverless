@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/purchase-orders/2001/reject",
+    "body": {
+      "DecidedBy": "golden.approver"
+    }
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Message": "Version must be the Version from the purchase order you loaded."
+    }
+  }
+}

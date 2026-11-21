@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders?pageSize=101"
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Message": "Page must be 1 or more and PageSize from 1 to 100."
+    }
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders?supplierId=45&sort=OrderNumber&dir=asc"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "TotalCount": 44,
+      "Page": 1,
+      "PageSize": 25,
+      "Items": [
+        {
+          "Id": 88,
+          "OrderNumber": "PO-000088",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-01-18T06:45:20",
+          "RequiredBy": "2026-01-27T00:00:00",
+          "TotalAmount": 7276.3500,
+          "LineCount": 4
+        },
+        {
+          "Id": 137,
+          "OrderNumber": "PO-000137",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-01-25T08:08:38",
+          "RequiredBy": "2026-02-01T00:00:00",
+          "TotalAmount": 8953.7400,
+          "LineCount": 7
+        },
+        {
+          "Id": 195,
+          "OrderNumber": "PO-000195",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Pending",
+          "OrderDate": "2026-02-02T19:25:34",
+          "RequiredBy": "2026-03-15T00:00:00",
+          "TotalAmount": 6715.7100,
+          "LineCount": 2
+        },
+        {
+          "Id": 200,
+          "OrderNumber": "PO-000200",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-02-03T13:54:16",
+          "RequiredBy": "2026-03-21T00:00:00",
+          "TotalAmount": 15275.7800,
+          "LineCount": 6
+        },
+        {
+          "Id": 208,
+          "OrderNumber": "PO-000208",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-02-04T17:16:22",
+          "RequiredBy": "2026-03-17T00:00:00",
+          "TotalAmount": 9287.1000,
+          "LineCount": 4
+        },
+        {
+          "Id": 224,
+          "OrderNumber": "PO-000224",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-02-07T02:40:45",
+          "RequiredBy": null,
+          "TotalAmount": 8122.6100,
+          "LineCount": 5
+        },
+        {
+          "Id": 227,
+          "OrderNumber": "PO-000227",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Pending",
+          "OrderDate": "2026-02-07T13:22:12",
+          "RequiredBy": "2026-03-03T00:00:00",
+          "TotalAmount": 8087.3700,
+          "LineCount": 3
+        },
+        {
+          "Id": 375,
+          "OrderNumber": "PO-000375",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-03-01T00:40:51.997",
+          "RequiredBy": "2026-03-27T00:00:00",
+          "TotalAmount": 17346.7600,
+          "LineCount": 6
+        },
+        {
+          "Id": 494,
+          "OrderNumber": "PO-000494",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Pending",
+          "OrderDate": "2026-03-18T11:17:11",
+          "RequiredBy": null,
+          "TotalAmount": 14507.6600,
+          "LineCount": 4
+        },
+        {
+          "Id": 542,
+          "OrderNumber": "PO-000542",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-03-25T09:57:56",
+          "RequiredBy": "2026-04-06T00:00:00",
+          "TotalAmount": 2995.0400,
+          "LineCount": 2
+        },
+        {
+          "Id": 586,
+          "OrderNumber": "PO-000586",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-03-31T21:39:16",
+          "RequiredBy": "2026-05-04T00:00:00",
+          "TotalAmount": 13468.0500,
+          "LineCount": 6
+        },
+        {
+          "Id": 611,
+          "OrderNumber": "PO-000611",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-04-04T11:33:48",
+          "RequiredBy": "2026-04-16T00:00:00",
+          "TotalAmount": 1483.4700,
+          "LineCount": 2
+        },
+        {
+          "Id": 665,
+          "OrderNumber": "PO-000665",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-04-12T07:30:03",
+          "RequiredBy": "2026-05-31T00:00:00",
+          "TotalAmount": 5828.5500,
+          "LineCount": 2
+        },
+        {
+          "Id": 716,
+          "OrderNumber": "PO-000716",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-04-19T19:27:53",
+          "RequiredBy": "2026-06-01T00:00:00",
+          "TotalAmount": 13667.5700,
+          "LineCount": 7
+        },
+        {
+          "Id": 729,
+          "OrderNumber": "PO-000729",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Pending",
+          "OrderDate": "2026-04-21T15:31:01",
+          "RequiredBy": "2026-05-28T00:00:00",
+          "TotalAmount": 10232.7300,
+          "LineCount": 5
+        },
+        {
+          "Id": 778,
+          "OrderNumber": "PO-000778",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Pending",
+          "OrderDate": "2026-04-28T19:41:42",
+          "RequiredBy": "2026-05-15T00:00:00",
+          "TotalAmount": 22350.0600,
+          "LineCount": 5
+        },
+        {
+          "Id": 791,
+          "OrderNumber": "PO-000791",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-04-30T19:11:07",
+          "RequiredBy": "2026-05-20T00:00:00",
+          "TotalAmount": 4979.0800,
+          "LineCount": 4
+        },
+        {
+          "Id": 806,
+          "OrderNumber": "PO-000806",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Rejected",
+          "OrderDate": "2026-05-02T21:54:05",
+          "RequiredBy": "2026-06-11T00:00:00",
+          "TotalAmount": 8781.4300,
+          "LineCount": 3
+        },
+        {
+          "Id": 887,
+          "OrderNumber": "PO-000887",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-05-14T19:26:26",
+          "RequiredBy": "2026-06-12T00:00:00",
+          "TotalAmount": 23970.0400,
+          "LineCount": 6
+        },
+        {
+          "Id": 900,
+          "OrderNumber": "PO-000900",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Rejected",
+          "OrderDate": "2026-05-16T14:02:35",
+          "RequiredBy": null,
+          "TotalAmount": 8401.6100,
+          "LineCount": 2
+        },
+        {
+          "Id": 936,
+          "OrderNumber": "PO-000936",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Rejected",
+          "OrderDate": "2026-05-21T21:43:49",
+          "RequiredBy": "2026-06-19T00:00:00",
+          "TotalAmount": 5345.9400,
+          "LineCount": 3
+        },
+        {
+          "Id": 966,
+          "OrderNumber": "PO-000966",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-05-26T07:30:20",
+          "RequiredBy": "2026-07-08T00:00:00",
+          "TotalAmount": 20895.8600,
+          "LineCount": 7
+        },
+        {
+          "Id": 992,
+          "OrderNumber": "PO-000992",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Rejected",
+          "OrderDate": "2026-05-30T01:12:43",
+          "RequiredBy": "2026-06-10T00:00:00",
+          "TotalAmount": 15327.5200,
+          "LineCount": 6
+        },
+        {
+          "Id": 994,
+          "OrderNumber": "PO-000994",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-05-30T08:40:00",
+          "RequiredBy": "2026-06-18T00:00:00",
+          "TotalAmount": 625.1000,
+          "LineCount": 1
+        },
+        {
+          "Id": 1088,
+          "OrderNumber": "PO-001088",
+          "SupplierId": 45,
+          "SupplierName": "Northwind Traders",
+          "Status": "Approved",
+          "OrderDate": "2026-06-13T00:14:07",
+          "RequiredBy": "2026-07-04T00:00:00",
+          "TotalAmount": 7910.3700,
+          "LineCount": 3
+        }
+      ]
+    }
+  }
+}

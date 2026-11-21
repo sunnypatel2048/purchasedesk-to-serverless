@@ -6,6 +6,9 @@ using System.Web.Http.Filters;
 namespace PurchaseDesk.Web.Infrastructure
 {
     // Maps the stored procedures' THROW numbers to HTTP statuses. Anything else stays a 500.
+    // Known gap, kept as recorded legacy behaviour (golden/api/write-12-create-sku-41-chars.json): an over-long value
+    // inside the order-lines table-valued parameter raises 2629 with 8061 on SQL Server 2019 CU32, and was seen as a
+    // deadlock (1205) on 2019 RTM. Neither is mapped below, so the API answers 500. The new system returns 400.
     public class SqlErrorExceptionFilter : ExceptionFilterAttribute
     {
         public override void OnException(HttpActionExecutedContext context)
@@ -39,7 +42,7 @@ namespace PurchaseDesk.Web.Infrastructure
                 case 50003: status = HttpStatusCode.Conflict; return true;     // RowVer mismatch
                 case 50004: status = HttpStatusCode.Conflict; return true;     // no longer Pending
                 case 50005: status = (HttpStatusCode)422; return true;         // over the approval limit
-                case 2628:                                                     // string would be truncated (2019+)
+                case 2628:                                                     // string would be truncated (2019+), in a table
                 case 8152:                                                     // string would be truncated (older)
                     status = HttpStatusCode.BadRequest;
                     message = "A value is longer than the field allows.";

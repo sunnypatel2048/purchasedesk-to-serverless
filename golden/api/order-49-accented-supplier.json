@@ -1,0 +1,75 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/49"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 49,
+      "OrderNumber": "PO-000049",
+      "SupplierId": 47,
+      "SupplierCode": "S047",
+      "SupplierName": "Müller GmbH",
+      "Status": "Approved",
+      "OrderDate": "2026-01-12T13:06:22",
+      "RequiredBy": "2026-02-10T00:00:00",
+      "Notes": null,
+      "TotalAmount": 13114.5000,
+      "CreatedBy": "T.Nguyen",
+      "DecidedBy": "m.chen",
+      "DecidedAt": "2026-01-14T15:12:22",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0047",
+          "Description": "Drill bits, pack of 25",
+          "Quantity": 4,
+          "UnitPrice": 81.7700,
+          "DiscountPercent": 12.50,
+          "LineAmount": 286.2000
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-0364",
+          "Description": "Cable ties, pack of 50",
+          "Quantity": 36,
+          "UnitPrice": 184.2100,
+          "DiscountPercent": 0.00,
+          "LineAmount": 6631.5600
+        },
+        {
+          "LineNumber": 3,
+          "Sku": "SKU-0271",
+          "Description": "Hex bolts M8, pack of 45",
+          "Quantity": 32,
+          "UnitPrice": 132.9000,
+          "DiscountPercent": 0.00,
+          "LineAmount": 4252.8000
+        },
+        {
+          "LineNumber": 4,
+          "Sku": "SKU-0257",
+          "Description": "Drill bits, pack of 5",
+          "Quantity": 10,
+          "UnitPrice": 148.2500,
+          "DiscountPercent": 0.00,
+          "LineAmount": 1482.5000
+        },
+        {
+          "LineNumber": 5,
+          "Sku": "SKU-0320",
+          "Description": "Degreaser 5L, pack of 25",
+          "Quantity": 28,
+          "UnitPrice": 16.4800,
+          "DiscountPercent": 0.00,
+          "LineAmount": 461.4400
+        }
+      ]
+    }
+  }
+}

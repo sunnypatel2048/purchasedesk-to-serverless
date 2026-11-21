@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/suppliers/999"
+  },
+  "response": {
+    "status": 404,
+    "headers": {},
+    "body": null
+  }
+}

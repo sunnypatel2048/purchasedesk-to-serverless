@@ -1,0 +1,84 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/1"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 1,
+      "OrderNumber": "PO-000001",
+      "SupplierId": 22,
+      "SupplierCode": "S022",
+      "SupplierName": "Granite Electrical Partners",
+      "Status": "Pending",
+      "OrderDate": "2026-01-05T14:26:51",
+      "RequiredBy": "2026-01-16T00:00:00",
+      "Notes": "URGENT - deliver to dock 4",
+      "TotalAmount": 13323.1600,
+      "CreatedBy": "A.Kumar",
+      "DecidedBy": null,
+      "DecidedAt": null,
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0286",
+          "Description": "Safety glasses, pack of 20",
+          "Quantity": 28,
+          "UnitPrice": 34.0000,
+          "DiscountPercent": 7.50,
+          "LineAmount": 880.6000
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-0202",
+          "Description": "Copy paper A4, pack of 20",
+          "Quantity": 11,
+          "UnitPrice": 126.7900,
+          "DiscountPercent": 0.00,
+          "LineAmount": 1394.6900
+        },
+        {
+          "LineNumber": 3,
+          "Sku": "SKU-0085",
+          "Description": "Pallet wrap, pack of 35",
+          "Quantity": 20,
+          "UnitPrice": 79.8900,
+          "DiscountPercent": 0.00,
+          "LineAmount": 1597.8000
+        },
+        {
+          "LineNumber": 4,
+          "Sku": "SKU-0181",
+          "Description": "Hex bolts M8, pack of 35",
+          "Quantity": 39,
+          "UnitPrice": 161.4200,
+          "DiscountPercent": 0.00,
+          "LineAmount": 6295.3800
+        },
+        {
+          "LineNumber": 5,
+          "Sku": "SKU-0340",
+          "Description": "Degreaser 5L, pack of 25",
+          "Quantity": 34,
+          "UnitPrice": 11.3700,
+          "DiscountPercent": 0.00,
+          "LineAmount": 386.5800
+        },
+        {
+          "LineNumber": 6,
+          "Sku": "SKU-0059",
+          "Description": "Fuse 10A, pack of 45",
+          "Quantity": 17,
+          "UnitPrice": 162.8300,
+          "DiscountPercent": 0.00,
+          "LineAmount": 2768.1100
+        }
+      ]
+    }
+  }
+}

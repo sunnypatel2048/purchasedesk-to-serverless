@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/purchase-orders/2002/reject",
+    "body": {
+      "DecidedBy": "golden.approver",
+      "Version": "AAAAAAAAF4c="
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 2002,
+      "OrderNumber": "PO-002002",
+      "SupplierId": 1,
+      "SupplierCode": "S001",
+      "SupplierName": "Evergreen Electrical Partners",
+      "Status": "Rejected",
+      "OrderDate": "<now>",
+      "RequiredBy": null,
+      "Notes": "Golden scenario",
+      "TotalAmount": 30000.0000,
+      "CreatedBy": "golden.test",
+      "DecidedBy": "golden.approver",
+      "DecidedAt": "<now>",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-GOLD-3",
+          "Description": "Bulk golden line",
+          "Quantity": 200,
+          "UnitPrice": 150.0000,
+          "DiscountPercent": 0.00,
+          "LineAmount": 30000.0000
+        }
+      ]
+    }
+  }
+}
