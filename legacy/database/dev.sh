@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Local SQL Server for the legacy database.
 #
-#   legacy/database/dev.sh up       start SQL Server and load the scripts into an empty PurchaseDesk database
+#   legacy/database/dev.sh up       start SQL Server; load load-order.txt into an empty database, or reload the
+#                                   rerunnable scripts (types, procedures) into a loaded one
 #   legacy/database/dev.sh reset    wipe everything and load again from scratch
 #   legacy/database/dev.sh check    verify schema and seed data; one RESULT line per check, non-zero exit on failure
+#   legacy/database/dev.sh test     procedure tests, then check; non-zero exit on any failure
 #   legacy/database/dev.sh facts    print the seed facts compared by check (counts, planted traits, fingerprints)
 #   legacy/database/dev.sh sql ...  run sqlcmd inside the container, e.g. dev.sh sql -Q "SELECT 1"
 #   legacy/database/dev.sh down     stop and remove the container and its data
@@ -28,21 +30,39 @@ scalar() {
   sql -d "${2:-master}" -h -1 -W -Q "SET NOCOUNT ON; $1" | tr -d '[:space:]'
 }
 
+# load all | load rerunnable: the scripts from load-order.txt, in order. "rerunnable" starts at the marker line.
 load() {
-  for f in [0-9][0-9]-*.sql; do
-    echo "Loading $f"
-    sql -i "/db/$f"
-  done
+  local which="$1" line started=0
+  [[ "$which" == all ]] && started=1
+  while IFS= read -r -u 3 line; do
+    if [[ "$line" == "# rerunnable"* ]]; then started=1; continue; fi
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    if [[ $started -eq 1 ]]; then
+      echo "Loading $line"
+      sql -i "/db/$line" </dev/null
+    fi
+  done 3< load-order.txt
 }
 
 up() {
   docker compose --progress quiet up --detach --wait --wait-timeout 180
   if [[ "$(scalar "SELECT CASE WHEN OBJECT_ID(N'PurchaseDesk.dbo.Suppliers') IS NULL THEN 0 ELSE 1 END;")" == 1 ]]; then
-    echo "PurchaseDesk is already loaded. Use dev.sh reset to load it again from scratch."
+    echo "PurchaseDesk is already loaded; reloading the rerunnable scripts. Use dev.sh reset to start from scratch."
+    load rerunnable
   else
-    load
+    load all
   fi
   echo "SQL Server is running on 127.0.0.1:1433."
+}
+
+# Procedure tests: each case in its own rolled-back transaction. Then the full check, which proves (through the
+# seed fingerprints) that the tests left no data behind.
+run_tests() {
+  local out
+  out="$(sql -d PurchaseDesk -h -1 -W -i /db/checks/procedure-tests.sql </dev/null)"
+  echo "$out"
+  check
+  ! grep -q "status=FAIL" <<<"$out"
 }
 
 failures=0
@@ -104,8 +124,9 @@ case "${1:-}" in
   up) up ;;
   reset) docker compose down --volumes >/dev/null 2>&1 || true; up ;;
   check) check ;;
+  test) run_tests ;;
   facts) facts ;;
   sql) shift; sql "$@" ;;
   down) docker compose down --volumes ;;
-  *) echo "usage: $0 up|reset|check|facts|sql|down" >&2; exit 2 ;;
+  *) echo "usage: $0 up|reset|check|test|facts|sql|down" >&2; exit 2 ;;
 esac
