@@ -1,0 +1,26 @@
+# Local SQL Server for developing the legacy T-SQL. Use legacy/database/dev.sh rather than calling this directly.
+# The sa password lives in the gitignored .env next to this file; dev.sh creates it on first run.
+name: purchasedesk-legacy-db
+
+services:
+  sqlserver:
+    # Same build as CI targets and the EC2 image (ADR-0003). Runs under Rosetta on Apple Silicon.
+    image: mcr.microsoft.com/mssql/server:2019-CU32-GDR8-ubuntu-20.04
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?run dev.sh once to create .env}
+    ports:
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - .:/db:ro
+    # No restart policy: a crash must show up, not be hidden.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -C -b -Q "SELECT 1"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
