@@ -16,9 +16,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PurchaseDesk.Web\PurchaseDesk.Web.csproj" />
+    <ProjectReference Include="..\PurchaseDesk.Export\PurchaseDesk.Export.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />  <!-- TextFieldParser, to read the CSV back -->
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 
