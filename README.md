@@ -27,6 +27,9 @@ traffic keeps flowing.
 |---|---|
 | [`legacy/`](legacy) | The "before" system, frozen: the ASP.NET Web API 2 app, the nightly CSV export, the SQL Server schema, deterministic seed data and seven stored procedures, and their tests |
 | [`golden/`](golden) | What the legacy system actually returns, recorded on Windows: 38 API responses and 2 export files. The definition of "equivalent" for the new system ([ADR-0009](docs/adr/0009-golden-files-define-equivalent.md)) |
+| [`docs/assessment.md`](docs/assessment.md) | The migration assessment: current state, risks, strategy per component, target architecture, sequence and rollback |
+| [`docs/sqlserver-to-postgresql.md`](docs/sqlserver-to-postgresql.md) | Column-by-column type map and the behaviour differences between the two engines |
+| [`docs/measurements.md`](docs/measurements.md) | Every measured number, with how and when it was taken |
 | [`docs/adr/`](docs/adr) | Decision records: why the migration is built the way it is |
 
 The legacy app targets .NET Framework 4.8 and compiles on a Mac with `dotnet build`; it runs and is tested on
