@@ -1,0 +1,27 @@
+# Phase 0.4 spike: SQL Server in Docker on an Apple Silicon Mac (amd64 image under Rosetta).
+# Run it with spikes/sqlserver/run.sh. The sa password lives in the gitignored .env next to this file.
+name: purchasedesk-spike
+
+services:
+  sqlserver:
+    # Pinned: 2019 CU32 is the final cumulative update; GDR8 is the latest security fix on top of it.
+    # Override to compare versions, e.g. SQLSERVER_TAG=2022-CU28-ubuntu-22.04
+    image: mcr.microsoft.com/mssql/server:${SQLSERVER_TAG:-2019-CU32-GDR8-ubuntu-20.04}
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?run run.sh once to create .env}
+    ports:
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - ../database:/spike-database:ro
+    # No restart policy: a crash under emulation must show up, not be hidden by a restart.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - for p in /opt/mssql-tools18/bin/sqlcmd /opt/mssql-tools/bin/sqlcmd; do [ -x "$$p" ] && exec "$$p" -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -C -b -Q "SELECT 1"; done; exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
