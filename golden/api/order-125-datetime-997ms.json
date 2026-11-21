@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/125"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 125,
+      "OrderNumber": "PO-000125",
+      "SupplierId": 23,
+      "SupplierCode": "S023",
+      "SupplierName": "Juniper Packaging Inc",
+      "Status": "Approved",
+      "OrderDate": "2026-01-23T14:13:54.997",
+      "RequiredBy": "2026-02-24T00:00:00",
+      "Notes": null,
+      "TotalAmount": 1831.7500,
+      "CreatedBy": "l.garcia",
+      "DecidedBy": "s.weber",
+      "DecidedAt": "2026-01-25T23:45:54.997",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0058",
+          "Description": "Label rolls, pack of 25",
+          "Quantity": 25,
+          "UnitPrice": 73.2700,
+          "DiscountPercent": 0.00,
+          "LineAmount": 1831.7500
+        }
+      ]
+    }
+  }
+}

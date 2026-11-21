@@ -1,0 +1,25 @@
+OrderNumber,SupplierCode,SupplierName,ApprovedAt,ApprovedBy,LineNumber,Sku,Description,Quantity,UnitPrice,DiscountPercent,LineAmount,OrderTotal
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,1,SKU-0096,"Safety glasses, pack of 50",27,224.9200,5.00,5769.2000,27085.4800
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,2,SKU-0097,"Drill bits, pack of 30",27,143.7400,0.00,3880.9800,27085.4800
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,3,SKU-0095,"Pallet wrap, pack of 30",28,31.7100,0.00,887.8800,27085.4800
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,4,SKU-0363,"Nitrile gloves, pack of 40",35,248.7300,0.00,8705.5500,27085.4800
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,5,SKU-0091,"Hex bolts M8, pack of 35",16,47.9000,7.50,708.9200,27085.4800
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,6,SKU-0335,"Pallet wrap, pack of 30",29,50.6300,15.00,1248.0300,27085.4800
+PO-000041,S022,Granite Electrical Partners,1/14/2026 9:00:52 AM,m.chen,7,SKU-0350,"Degreaser 5L, pack of 30",36,163.4700,0.00,5884.9200,27085.4800
+PO-000046,S004,Beacon Office Ltd,1/14/2026 8:06:26 AM,R.Okafor,1,SKU-0142,"Copy paper A4, pack of 15",36,231.7800,5.00,7926.8800,20063.9100
+PO-000046,S004,Beacon Office Ltd,1/14/2026 8:06:26 AM,R.Okafor,2,SKU-0228,"Label rolls, pack of 45",15,3.4900,0.00,52.3500,20063.9100
+PO-000046,S004,Beacon Office Ltd,1/14/2026 8:06:26 AM,R.Okafor,3,SKU-0295,"Pallet wrap, pack of 5",28,27.7300,0.00,776.4400,20063.9100
+PO-000046,S004,Beacon Office Ltd,1/14/2026 8:06:26 AM,R.Okafor,4,SKU-0176,"Safety glasses, pack of 25",29,188.3000,0.00,5460.7000,20063.9100
+PO-000046,S004,Beacon Office Ltd,1/14/2026 8:06:26 AM,R.Okafor,5,SKU-0185,"Pallet wrap, pack of 40",23,221.7000,0.00,5099.1000,20063.9100
+PO-000046,S004,Beacon Office Ltd,1/14/2026 8:06:26 AM,R.Okafor,6,SKU-0006,"Safety glasses, pack of 40",6,124.7400,0.00,748.4400,20063.9100
+PO-000049,S047,Müller GmbH,1/14/2026 3:12:22 PM,m.chen,1,SKU-0047,"Drill bits, pack of 25",4,81.7700,12.50,286.2000,13114.5000
+PO-000049,S047,Müller GmbH,1/14/2026 3:12:22 PM,m.chen,2,SKU-0364,"Cable ties, pack of 50",36,184.2100,0.00,6631.5600,13114.5000
+PO-000049,S047,Müller GmbH,1/14/2026 3:12:22 PM,m.chen,3,SKU-0271,"Hex bolts M8, pack of 45",32,132.9000,0.00,4252.8000,13114.5000
+PO-000049,S047,Müller GmbH,1/14/2026 3:12:22 PM,m.chen,4,SKU-0257,"Drill bits, pack of 5",10,148.2500,0.00,1482.5000,13114.5000
+PO-000049,S047,Müller GmbH,1/14/2026 3:12:22 PM,m.chen,5,SKU-0320,"Degreaser 5L, pack of 25",28,16.4800,0.00,461.4400,13114.5000
+PO-000058,S031,Granite Office Partners,1/14/2026 3:30:06 AM,s.weber,1,SKU-0117,"Drill bits, pack of 5",38,59.6400,0.00,2266.3200,16782.7100
+PO-000058,S031,Granite Office Partners,1/14/2026 3:30:06 AM,s.weber,2,SKU-0159,"Fuse 10A, pack of 25",28,68.6800,15.00,1634.5800,16782.7100
+PO-000058,S031,Granite Office Partners,1/14/2026 3:30:06 AM,s.weber,3,SKU-0048,"Label rolls, pack of 45",20,106.9100,2.50,2084.7500,16782.7100
+PO-000058,S031,Granite Office Partners,1/14/2026 3:30:06 AM,s.weber,4,SKU-0363,"Nitrile gloves, pack of 35",28,72.3800,0.00,2026.6400,16782.7100
+PO-000058,S031,Granite Office Partners,1/14/2026 3:30:06 AM,s.weber,5,SKU-0337,"Drill bits, pack of 5",28,249.8100,0.00,6994.6800,16782.7100
+PO-000058,S031,Granite Office Partners,1/14/2026 3:30:06 AM,s.weber,6,SKU-0162,"Copy paper A4, pack of 20",40,46.7300,5.00,1775.7400,16782.7100

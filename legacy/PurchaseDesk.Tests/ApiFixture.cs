@@ -28,7 +28,9 @@ namespace PurchaseDesk.Tests
                                    ?? "Server=localhost;Database=PurchaseDesk;Integrated Security=true",
                 ApiKey = ApiKey,
                 ApprovalLimit = ApprovalLimit,
-                LogFolder = Path.Combine(Path.GetTempPath(), "purchasedesk-tests"),
+                // CI points this at a folder it uploads, so failures can be read from the app's own log.
+                LogFolder = Environment.GetEnvironmentVariable("PURCHASEDESK_LOG_DIR")
+                            ?? Path.Combine(Path.GetTempPath(), "purchasedesk-tests"),
             };
 
             var config = new HttpConfiguration();

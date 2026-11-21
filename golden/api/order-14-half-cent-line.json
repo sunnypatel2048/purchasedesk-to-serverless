@@ -1,0 +1,75 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/14"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 14,
+      "OrderNumber": "PO-000014",
+      "SupplierId": 25,
+      "SupplierCode": "S025",
+      "SupplierName": "Delta Tools Partners",
+      "Status": "Approved",
+      "OrderDate": "2026-01-07T09:06:16",
+      "RequiredBy": "2026-01-21T00:00:00",
+      "Notes": null,
+      "TotalAmount": 13059.8900,
+      "CreatedBy": "A.Kumar",
+      "DecidedBy": "m.chen",
+      "DecidedAt": "2026-01-07T18:15:16",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0193",
+          "Description": "Nitrile gloves, pack of 15",
+          "Quantity": 17,
+          "UnitPrice": 159.0100,
+          "DiscountPercent": 12.50,
+          "LineAmount": 2365.2700
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-0056",
+          "Description": "Safety glasses, pack of 5",
+          "Quantity": 24,
+          "UnitPrice": 245.0600,
+          "DiscountPercent": 0.00,
+          "LineAmount": 5881.4400
+        },
+        {
+          "LineNumber": 3,
+          "Sku": "SKU-0291",
+          "Description": "Hex bolts M8, pack of 40",
+          "Quantity": 1,
+          "UnitPrice": 150.1450,
+          "DiscountPercent": 0.00,
+          "LineAmount": 150.1500
+        },
+        {
+          "LineNumber": 4,
+          "Sku": "SKU-0160",
+          "Description": "Degreaser 5L, pack of 20",
+          "Quantity": 23,
+          "UnitPrice": 196.3700,
+          "DiscountPercent": 0.00,
+          "LineAmount": 4516.5100
+        },
+        {
+          "LineNumber": 5,
+          "Sku": "SKU-0362",
+          "Description": "Copy paper A4, pack of 45",
+          "Quantity": 1,
+          "UnitPrice": 154.2300,
+          "DiscountPercent": 5.00,
+          "LineAmount": 146.5200
+        }
+      ]
+    }
+  }
+}

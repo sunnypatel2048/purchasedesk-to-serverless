@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/suppliers/47"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 47,
+      "Code": "S047",
+      "Name": "Müller GmbH",
+      "Email": "s047@example.com",
+      "IsActive": true,
+      "CreatedAt": "2025-10-21T09:00:00"
+    }
+  }
+}

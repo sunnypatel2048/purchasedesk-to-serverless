@@ -1,0 +1,93 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/250"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 250,
+      "OrderNumber": "PO-000250",
+      "SupplierId": 19,
+      "SupplierCode": "S019",
+      "SupplierName": "Juniper Safety Partners",
+      "Status": "Approved",
+      "OrderDate": "2026-02-10T19:09:03.003",
+      "RequiredBy": "2026-03-22T00:00:00",
+      "Notes": null,
+      "TotalAmount": 15030.8100,
+      "CreatedBy": "j.smith",
+      "DecidedBy": "R.Okafor",
+      "DecidedAt": "2026-02-13T08:10:03.003",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0085",
+          "Description": "Pallet wrap, pack of 35",
+          "Quantity": 1,
+          "UnitPrice": 29.4100,
+          "DiscountPercent": 0.00,
+          "LineAmount": 29.4100
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-0321",
+          "Description": "Hex bolts M8, pack of 25",
+          "Quantity": 11,
+          "UnitPrice": 6.7900,
+          "DiscountPercent": 2.50,
+          "LineAmount": 72.8200
+        },
+        {
+          "LineNumber": 3,
+          "Sku": "SKU-0139",
+          "Description": "Fuse 10A, pack of 35",
+          "Quantity": 24,
+          "UnitPrice": 108.4000,
+          "DiscountPercent": 12.50,
+          "LineAmount": 2276.4000
+        },
+        {
+          "LineNumber": 4,
+          "Sku": "SKU-0079",
+          "Description": "Fuse 10A, pack of 35",
+          "Quantity": 39,
+          "UnitPrice": 242.1600,
+          "DiscountPercent": 0.00,
+          "LineAmount": 9444.2400
+        },
+        {
+          "LineNumber": 5,
+          "Sku": "SKU-0399",
+          "Description": "Fuse 10A, pack of 50",
+          "Quantity": 10,
+          "UnitPrice": 207.9200,
+          "DiscountPercent": 0.00,
+          "LineAmount": 2079.2000
+        },
+        {
+          "LineNumber": 6,
+          "Sku": "SKU-0003",
+          "Description": "Nitrile gloves, pack of 20",
+          "Quantity": 12,
+          "UnitPrice": 92.7700,
+          "DiscountPercent": 0.00,
+          "LineAmount": 1113.2400
+        },
+        {
+          "LineNumber": 7,
+          "Sku": "SKU-0399",
+          "Description": "Fuse 10A, pack of 25",
+          "Quantity": 5,
+          "UnitPrice": 3.1000,
+          "DiscountPercent": 0.00,
+          "LineAmount": 15.5000
+        }
+      ]
+    }
+  }
+}

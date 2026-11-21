@@ -1,0 +1,294 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "TotalCount": 2000,
+      "Page": 1,
+      "PageSize": 25,
+      "Items": [
+        {
+          "Id": 2000,
+          "OrderNumber": "PO-002000",
+          "SupplierId": 47,
+          "SupplierName": "Müller GmbH",
+          "Status": "Rejected",
+          "OrderDate": "2026-10-24T01:55:54.003",
+          "RequiredBy": "2026-11-10T00:00:00",
+          "TotalAmount": 15150.1200,
+          "LineCount": 4
+        },
+        {
+          "Id": 1999,
+          "OrderNumber": "PO-001999",
+          "SupplierId": 14,
+          "SupplierName": "Ironwood Safety Ltd",
+          "Status": "Pending",
+          "OrderDate": "2026-10-23T21:59:55",
+          "RequiredBy": null,
+          "TotalAmount": 5689.2500,
+          "LineCount": 4
+        },
+        {
+          "Id": 1998,
+          "OrderNumber": "PO-001998",
+          "SupplierId": 49,
+          "SupplierName": "Ångström Labs",
+          "Status": "Approved",
+          "OrderDate": "2026-10-23T19:00:21",
+          "RequiredBy": "2026-11-25T00:00:00",
+          "TotalAmount": 7182.6300,
+          "LineCount": 3
+        },
+        {
+          "Id": 1997,
+          "OrderNumber": "PO-001997",
+          "SupplierId": 3,
+          "SupplierName": "Juniper Tools Ltd",
+          "Status": "Pending",
+          "OrderDate": "2026-10-23T14:26:22",
+          "RequiredBy": "2026-11-18T00:00:00",
+          "TotalAmount": 3103.5000,
+          "LineCount": 1
+        },
+        {
+          "Id": 1996,
+          "OrderNumber": "PO-001996",
+          "SupplierId": 20,
+          "SupplierName": "Beacon Electrical Ltd",
+          "Status": "Pending",
+          "OrderDate": "2026-10-23T10:41:37",
+          "RequiredBy": null,
+          "TotalAmount": 5555.0400,
+          "LineCount": 2
+        },
+        {
+          "Id": 1995,
+          "OrderNumber": "PO-001995",
+          "SupplierId": 41,
+          "SupplierName": "Harbor Tools Inc",
+          "Status": "Rejected",
+          "OrderDate": "2026-10-23T07:44:20",
+          "RequiredBy": null,
+          "TotalAmount": 9365.2100,
+          "LineCount": 4
+        },
+        {
+          "Id": 1994,
+          "OrderNumber": "PO-001994",
+          "SupplierId": 20,
+          "SupplierName": "Beacon Electrical Ltd",
+          "Status": "Approved",
+          "OrderDate": "2026-10-23T05:45:06",
+          "RequiredBy": null,
+          "TotalAmount": 21762.1400,
+          "LineCount": 7
+        },
+        {
+          "Id": 1993,
+          "OrderNumber": "PO-001993",
+          "SupplierId": 38,
+          "SupplierName": "Atlas Packaging Inc",
+          "Status": "Approved",
+          "OrderDate": "2026-10-23T00:24:26",
+          "RequiredBy": "2026-12-03T00:00:00",
+          "TotalAmount": 11676.0500,
+          "LineCount": 3
+        },
+        {
+          "Id": 1992,
+          "OrderNumber": "PO-001992",
+          "SupplierId": 11,
+          "SupplierName": "Ironwood Office Supply Co",
+          "Status": "Pending",
+          "OrderDate": "2026-10-22T21:05:16",
+          "RequiredBy": "2026-11-01T00:00:00",
+          "TotalAmount": 11361.7300,
+          "LineCount": 3
+        },
+        {
+          "Id": 1991,
+          "OrderNumber": "PO-001991",
+          "SupplierId": 22,
+          "SupplierName": "Granite Electrical Partners",
+          "Status": "Approved",
+          "OrderDate": "2026-10-22T18:09:36",
+          "RequiredBy": "2026-12-12T00:00:00",
+          "TotalAmount": 22031.0700,
+          "LineCount": 6
+        },
+        {
+          "Id": 1990,
+          "OrderNumber": "PO-001990",
+          "SupplierId": 31,
+          "SupplierName": "Granite Office Partners",
+          "Status": "Approved",
+          "OrderDate": "2026-10-22T13:46:14",
+          "RequiredBy": null,
+          "TotalAmount": 1686.6300,
+          "LineCount": 1
+        },
+        {
+          "Id": 1989,
+          "OrderNumber": "PO-001989",
+          "SupplierId": 16,
+          "SupplierName": "Juniper Industrial Inc",
+          "Status": "Rejected",
+          "OrderDate": "2026-10-22T09:34:06",
+          "RequiredBy": "2026-11-28T00:00:00",
+          "TotalAmount": 324.3900,
+          "LineCount": 1
+        },
+        {
+          "Id": 1988,
+          "OrderNumber": "PO-001988",
+          "SupplierId": 4,
+          "SupplierName": "Beacon Office Ltd",
+          "Status": "Approved",
+          "OrderDate": "2026-10-22T08:42:11",
+          "RequiredBy": null,
+          "TotalAmount": 28617.2100,
+          "LineCount": 6
+        },
+        {
+          "Id": 1987,
+          "OrderNumber": "PO-001987",
+          "SupplierId": 13,
+          "SupplierName": "Delta Logistics Supply Co",
+          "Status": "Approved",
+          "OrderDate": "2026-10-22T04:44:29",
+          "RequiredBy": "2026-12-08T00:00:00",
+          "TotalAmount": 6258.0700,
+          "LineCount": 2
+        },
+        {
+          "Id": 1986,
+          "OrderNumber": "PO-001986",
+          "SupplierId": 20,
+          "SupplierName": "Beacon Electrical Ltd",
+          "Status": "Approved",
+          "OrderDate": "2026-10-22T00:17:31",
+          "RequiredBy": "2026-11-02T00:00:00",
+          "TotalAmount": 20681.4200,
+          "LineCount": 6
+        },
+        {
+          "Id": 1985,
+          "OrderNumber": "PO-001985",
+          "SupplierId": 35,
+          "SupplierName": "Falcon Industrial Supply Co",
+          "Status": "Approved",
+          "OrderDate": "2026-10-21T21:02:48",
+          "RequiredBy": "2026-11-23T00:00:00",
+          "TotalAmount": 10936.7500,
+          "LineCount": 3
+        },
+        {
+          "Id": 1984,
+          "OrderNumber": "PO-001984",
+          "SupplierId": 27,
+          "SupplierName": "Harbor Office Partners",
+          "Status": "Approved",
+          "OrderDate": "2026-10-21T17:05:47",
+          "RequiredBy": null,
+          "TotalAmount": 2648.3100,
+          "LineCount": 1
+        },
+        {
+          "Id": 1983,
+          "OrderNumber": "PO-001983",
+          "SupplierId": 44,
+          "SupplierName": "Evergreen Electrical Partners",
+          "Status": "Approved",
+          "OrderDate": "2026-10-21T14:15:40",
+          "RequiredBy": null,
+          "TotalAmount": 1973.0900,
+          "LineCount": 1
+        },
+        {
+          "Id": 1982,
+          "OrderNumber": "PO-001982",
+          "SupplierId": 35,
+          "SupplierName": "Falcon Industrial Supply Co",
+          "Status": "Pending",
+          "OrderDate": "2026-10-21T11:35:26",
+          "RequiredBy": "2026-11-21T00:00:00",
+          "TotalAmount": 1128.6900,
+          "LineCount": 3
+        },
+        {
+          "Id": 1981,
+          "OrderNumber": "PO-001981",
+          "SupplierId": 41,
+          "SupplierName": "Harbor Tools Inc",
+          "Status": "Approved",
+          "OrderDate": "2026-10-21T05:51:43",
+          "RequiredBy": "2026-12-07T00:00:00",
+          "TotalAmount": 6491.3900,
+          "LineCount": 3
+        },
+        {
+          "Id": 1980,
+          "OrderNumber": "PO-001980",
+          "SupplierId": 42,
+          "SupplierName": "Atlas Chemicals Partners",
+          "Status": "Approved",
+          "OrderDate": "2026-10-21T02:25:59",
+          "RequiredBy": "2026-12-06T00:00:00",
+          "TotalAmount": 2423.5100,
+          "LineCount": 3
+        },
+        {
+          "Id": 1979,
+          "OrderNumber": "PO-001979",
+          "SupplierId": 17,
+          "SupplierName": "Beacon Tools Supply Co",
+          "Status": "Approved",
+          "OrderDate": "2026-10-20T22:38:38",
+          "RequiredBy": "2026-11-21T00:00:00",
+          "TotalAmount": 11779.7900,
+          "LineCount": 3
+        },
+        {
+          "Id": 1978,
+          "OrderNumber": "PO-001978",
+          "SupplierId": 9,
+          "SupplierName": "Evergreen Chemicals Supply Co",
+          "Status": "Approved",
+          "OrderDate": "2026-10-20T20:48:15",
+          "RequiredBy": null,
+          "TotalAmount": 22905.5700,
+          "LineCount": 5
+        },
+        {
+          "Id": 1977,
+          "OrderNumber": "PO-001977",
+          "SupplierId": 18,
+          "SupplierName": "Juniper Electrical Inc",
+          "Status": "Approved",
+          "OrderDate": "2026-10-20T17:42:44",
+          "RequiredBy": "2026-11-27T00:00:00",
+          "TotalAmount": 11689.4900,
+          "LineCount": 7
+        },
+        {
+          "Id": 1976,
+          "OrderNumber": "PO-001976",
+          "SupplierId": 5,
+          "SupplierName": "Atlas Office Inc",
+          "Status": "Approved",
+          "OrderDate": "2026-10-20T14:10:33",
+          "RequiredBy": "2026-11-17T00:00:00",
+          "TotalAmount": 14768.0000,
+          "LineCount": 7
+        }
+      ]
+    }
+  }
+}

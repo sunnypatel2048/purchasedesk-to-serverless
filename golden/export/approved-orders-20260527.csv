@@ -1,0 +1,45 @@
+OrderNumber,SupplierCode,SupplierName,ApprovedAt,ApprovedBy,LineNumber,Sku,Description,Quantity,UnitPrice,DiscountPercent,LineAmount,OrderTotal
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,1,SKU-0325,"Pallet wrap, pack of 50",15,178.9000,0.00,2683.5000,19373.3700
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,2,SKU-0121,"Hex bolts M8, pack of 40",22,113.7200,0.00,2501.8400,19373.3700
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,3,SKU-0270,"Degreaser 5L, pack of 5",38,18.3600,0.00,697.6800,19373.3700
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,4,SKU-0141,"Hex bolts M8, pack of 35",38,117.5500,7.50,4131.8800,19373.3700
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,5,SKU-0360,"Degreaser 5L, pack of 20",8,249.0000,0.00,1992.0000,19373.3700
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,6,SKU-0222,"Copy paper A4, pack of 30",17,20.1500,0.00,342.5500,19373.3700
+PO-000955,S043,Juniper Office Supply Co,5/27/2026 5:08:24 AM,m.chen,7,SKU-0296,"Safety glasses, pack of 20",38,184.8400,0.00,7023.9200,19373.3700
+PO-000956,S031,Granite Office Partners,5/27/2026 12:59:40 PM,s.weber,1,SKU-0315,"Pallet wrap, pack of 15",11,224.3200,7.50,2282.4600,16297.0900
+PO-000956,S031,Granite Office Partners,5/27/2026 12:59:40 PM,s.weber,2,SKU-0384,"Cable ties, pack of 15",39,18.1500,0.00,707.8500,16297.0900
+PO-000956,S031,Granite Office Partners,5/27/2026 12:59:40 PM,s.weber,3,SKU-0071,"Hex bolts M8, pack of 50",35,177.9600,0.00,6228.6000,16297.0900
+PO-000956,S031,Granite Office Partners,5/27/2026 12:59:40 PM,s.weber,4,SKU-0385,"Pallet wrap, pack of 20",21,119.7500,0.00,2514.7500,16297.0900
+PO-000956,S031,Granite Office Partners,5/27/2026 12:59:40 PM,s.weber,5,SKU-0355,"Pallet wrap, pack of 50",34,137.6600,2.50,4563.4300,16297.0900
+PO-000957,S031,Granite Office Partners,5/27/2026 5:34:06 PM,m.chen,1,SKU-0150,"Degreaser 5L, pack of 35",32,164.6500,12.50,4610.2000,17898.6600
+PO-000957,S031,Granite Office Partners,5/27/2026 5:34:06 PM,m.chen,2,SKU-0273,"Nitrile gloves, pack of 25",10,147.1100,0.00,1471.1000,17898.6600
+PO-000957,S031,Granite Office Partners,5/27/2026 5:34:06 PM,m.chen,3,SKU-0360,"Degreaser 5L, pack of 25",22,190.9000,0.00,4199.8000,17898.6600
+PO-000957,S031,Granite Office Partners,5/27/2026 5:34:06 PM,m.chen,4,SKU-0234,"Cable ties, pack of 30",11,70.4400,0.00,774.8400,17898.6600
+PO-000957,S031,Granite Office Partners,5/27/2026 5:34:06 PM,m.chen,5,SKU-0284,"Cable ties, pack of 35",27,232.6100,0.00,6280.4700,17898.6600
+PO-000957,S031,Granite Office Partners,5/27/2026 5:34:06 PM,m.chen,6,SKU-0340,"Degreaser 5L, pack of 40",25,22.4900,0.00,562.2500,17898.6600
+PO-000960,S047,Müller GmbH,5/27/2026 5:14:04 PM,R.Okafor,1,SKU-0092,"Copy paper A4, pack of 10",3,1.1600,0.00,3.4800,2898.6300
+PO-000960,S047,Müller GmbH,5/27/2026 5:14:04 PM,R.Okafor,2,SKU-0047,"Drill bits, pack of 45",1,93.4400,7.50,86.4300,2898.6300
+PO-000960,S047,Müller GmbH,5/27/2026 5:14:04 PM,R.Okafor,3,SKU-0122,"Copy paper A4, pack of 40",24,117.0300,0.00,2808.7200,2898.6300
+PO-000963,S014,Ironwood Safety Ltd,5/27/2026 5:15:52 AM,R.Okafor,1,SKU-0297,"Drill bits, pack of 10",3,35.8200,0.00,107.4600,107.4600
+PO-000964,S015,Delta Industrial Partners,5/27/2026 2:16:52 AM,s.weber,1,SKU-0273,"Nitrile gloves, pack of 25",6,49.5100,7.50,274.7800,6618.5500
+PO-000964,S015,Delta Industrial Partners,5/27/2026 2:16:52 AM,s.weber,2,SKU-0203,"Nitrile gloves, pack of 40",40,106.2200,0.00,4248.8000,6618.5500
+PO-000964,S015,Delta Industrial Partners,5/27/2026 2:16:52 AM,s.weber,3,SKU-0084,"Cable ties, pack of 50",37,47.4400,0.00,1755.2800,6618.5500
+PO-000964,S015,Delta Industrial Partners,5/27/2026 2:16:52 AM,s.weber,4,SKU-0233,"Nitrile gloves, pack of 30",11,36.3300,15.00,339.6900,6618.5500
+PO-000968,S011,Ironwood Office Supply Co,5/27/2026 3:44:31 PM,R.Okafor,1,SKU-0398,"Label rolls, pack of 5",13,164.6700,0.00,2140.7100,7668.1800
+PO-000968,S011,Ironwood Office Supply Co,5/27/2026 3:44:31 PM,R.Okafor,2,SKU-0231,"Hex bolts M8, pack of 45",37,165.9900,10.00,5527.4700,7668.1800
+PO-000971,S023,Juniper Packaging Inc,5/27/2026 11:01:33 PM,m.chen,1,SKU-0042,"Copy paper A4, pack of 40",24,39.6300,0.00,951.1200,4890.0000
+PO-000971,S023,Juniper Packaging Inc,5/27/2026 11:01:33 PM,m.chen,2,SKU-0184,"Cable ties, pack of 5",22,179.0400,0.00,3938.8800,4890.0000
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,1,SKU-0251,"Hex bolts M8, pack of 40",7,81.3200,2.50,555.0100,18227.3800
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,2,SKU-0315,"Pallet wrap, pack of 5",24,147.8600,0.00,3548.6400,18227.3800
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,3,SKU-0060,"Degreaser 5L, pack of 20",5,232.7300,0.00,1163.6500,18227.3800
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,4,SKU-0261,"Hex bolts M8, pack of 10",19,161.2300,0.00,3063.3700,18227.3800
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,5,SKU-0269,"Fuse 10A, pack of 20",22,21.4700,0.00,472.3400,18227.3800
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,6,SKU-0021,"Hex bolts M8, pack of 10",25,249.5300,0.00,6238.2500,18227.3800
+PO-000972,S002,Ironwood Electrical Supply Co,5/27/2026 4:28:47 PM,R.Okafor,7,SKU-0071,"Hex bolts M8, pack of 5",32,113.7900,12.50,3186.1200,18227.3800
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,1,SKU-0299,"Fuse 10A, pack of 20",20,117.4900,0.00,2349.8000,24442.5100
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,2,SKU-0012,"Copy paper A4, pack of 50",21,249.4100,0.00,5237.6100,24442.5100
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,3,SKU-0032,"Copy paper A4, pack of 15",29,170.8800,0.00,4955.5200,24442.5100
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,4,SKU-0199,"Fuse 10A, pack of 25",31,250.3000,0.00,7759.3000,24442.5100
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,5,SKU-0258,"Label rolls, pack of 35",27,97.5500,12.50,2304.6200,24442.5100
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,6,SKU-0203,"Nitrile gloves, pack of 50",9,39.8200,12.50,313.5800,24442.5100
+PO-000974,S021,Cedar Tools Inc,5/27/2026 10:03:37 PM,R.Okafor,7,SKU-0239,"Fuse 10A, pack of 20",12,126.8400,0.00,1522.0800,24442.5100

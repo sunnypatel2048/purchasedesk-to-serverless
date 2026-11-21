@@ -1,0 +1,75 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/purchase-orders/9"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "Id": 9,
+      "OrderNumber": "PO-000009",
+      "SupplierId": 49,
+      "SupplierCode": "S049",
+      "SupplierName": "Ångström Labs",
+      "Status": "Rejected",
+      "OrderDate": "2026-01-06T16:10:14",
+      "RequiredBy": "2026-02-17T00:00:00",
+      "Notes": null,
+      "TotalAmount": 8298.4400,
+      "CreatedBy": "T.Nguyen",
+      "DecidedBy": "m.chen",
+      "DecidedAt": "2026-01-08T21:34:14",
+      "Version": "<rowversion>",
+      "Lines": [
+        {
+          "LineNumber": 1,
+          "Sku": "SKU-0093",
+          "Description": "Nitrile gloves, pack of 15",
+          "Quantity": 18,
+          "UnitPrice": 226.6600,
+          "DiscountPercent": 2.50,
+          "LineAmount": 3977.8800
+        },
+        {
+          "LineNumber": 2,
+          "Sku": "SKU-0065",
+          "Description": "Pallet wrap, pack of 5",
+          "Quantity": 20,
+          "UnitPrice": 165.8100,
+          "DiscountPercent": 0.00,
+          "LineAmount": 3316.2000
+        },
+        {
+          "LineNumber": 3,
+          "Sku": "SKU-0008",
+          "Description": "Label rolls, pack of 50",
+          "Quantity": 7,
+          "UnitPrice": 46.9400,
+          "DiscountPercent": 12.50,
+          "LineAmount": 287.5100
+        },
+        {
+          "LineNumber": 4,
+          "Sku": "SKU-0334",
+          "Description": "Cable ties, pack of 15",
+          "Quantity": 17,
+          "UnitPrice": 29.6400,
+          "DiscountPercent": 0.00,
+          "LineAmount": 503.8800
+        },
+        {
+          "LineNumber": 5,
+          "Sku": "SKU-0256",
+          "Description": "Safety glasses, pack of 25",
+          "Quantity": 1,
+          "UnitPrice": 243.3900,
+          "DiscountPercent": 12.50,
+          "LineAmount": 212.9700
+        }
+      ]
+    }
+  }
+}
