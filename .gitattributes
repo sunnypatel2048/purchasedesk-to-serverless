@@ -1,0 +1,3 @@
+# Normalise text to LF in the repository. Windows runners check text out as CRLF; scripts must stay LF.
+* text=auto
+*.sh text eol=lf

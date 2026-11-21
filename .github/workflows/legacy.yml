@@ -1,0 +1,100 @@
+# The legacy application on GitHub's Windows runners: database, seed, procedures, API, and the IIS build.
+# The test job later gains the golden-file characterization tests (Phase 1.6).
+name: legacy
+
+on:
+  pull_request:
+    paths:
+      - "legacy/**"
+      - ".github/workflows/legacy.yml"
+  push:
+    branches: [main]
+    paths:
+      - "legacy/**"
+      - ".github/workflows/legacy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legacy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Database and API tests (SQL Server 2019)
+    # Matches the legacy server's OS (ADR-0002).
+    runs-on: windows-2022
+    timeout-minutes: 30
+    env:
+      PURCHASEDESK_SQL: Server=localhost;Database=PurchaseDesk;Integrated Security=true
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install SQL Server 2019 Developer
+        uses: potatoqualitee/mssqlsuite@bc850f242e5fe551e36cea6fa4bed608c58fa489 # v2
+        with:
+          install: sqlengine
+          version: 2019
+
+      - name: Load the database from load-order.txt
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Get-Content legacy/database/load-order.txt |
+            Where-Object { $_.Trim() -and -not $_.StartsWith('#') } |
+            ForEach-Object {
+              Write-Host "Loading $_"
+              sqlcmd -S localhost -E -b -i "legacy/database/$_"
+              if ($LASTEXITCODE -ne 0) { throw "Loading $_ failed" }
+            }
+
+      - name: Seed facts match seed-expected.txt (same data as Docker on the Mac)
+        run: |
+          $actual = sqlcmd -S localhost -E -b -d PurchaseDesk -h -1 -W -i legacy/database/checks/seed-facts.sql
+          if ($LASTEXITCODE -ne 0) { throw "seed-facts.sql failed" }
+          $actual = $actual | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() }
+          $expected = Get-Content legacy/database/seed-expected.txt | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() }
+          $actual | ForEach-Object { Write-Host $_ }
+          $diff = Compare-Object $expected $actual -CaseSensitive
+          if ($diff) { $diff | Format-Table -AutoSize | Out-String | Write-Host; throw "Seed facts differ from seed-expected.txt" }
+          Write-Host "RESULT seed-facts identical to seed-expected.txt ($($expected.Count) facts)"
+
+      - name: Procedure tests
+        run: |
+          $out = sqlcmd -S localhost -E -b -d PurchaseDesk -h -1 -W -i legacy/database/checks/procedure-tests.sql
+          if ($LASTEXITCODE -ne 0) { throw "procedure-tests.sql failed" }
+          $out | Where-Object { $_.Trim() } | ForEach-Object { Write-Host $_ }
+          if ($out -match 'status=FAIL') { throw "Procedure tests failed" }
+
+      - name: API smoke tests
+        run: dotnet test legacy/PurchaseDesk.Tests/PurchaseDesk.Tests.csproj --configuration Release --logger "console;verbosity=normal"
+
+  iis-build:
+    name: Build with Visual Studio MSBuild (IIS layout)
+    runs-on: windows-2022
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build with the real web application targets
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $msbuild = & $vswhere -latest -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
+          if (-not $msbuild) { throw "MSBuild.exe not found" }
+          Write-Host "MSBuild: $msbuild"
+
+          $project = 'legacy/PurchaseDesk.Web/PurchaseDesk.Web.csproj'
+          & $msbuild $project /restore /p:Configuration=Release /v:minimal /nologo
+          if ($LASTEXITCODE -ne 0) { throw "Build failed" }
+
+          $targets = (& $msbuild $project -getProperty:WebApplicationsTargetPath /nologo).Trim()
+          Write-Host "WebApplicationsTargetPath: $targets"
+          if ($targets -like '*NoWebApplicationTargets*') { throw "The stub was used instead of Visual Studio's targets" }
+          if (-not (Test-Path $targets)) { throw "Web application targets not found at $targets" }
