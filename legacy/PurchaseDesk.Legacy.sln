@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseDesk.Web", "Purchas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseDesk.Tests", "PurchaseDesk.Tests\PurchaseDesk.Tests.csproj", "{06AF377C-3062-41B4-97D1-8383F15B765E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseDesk.Export", "PurchaseDesk.Export\PurchaseDesk.Export.csproj", "{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{06AF377C-3062-41B4-97D1-8383F15B765E}.Release|x64.Build.0 = Release|Any CPU
 		{06AF377C-3062-41B4-97D1-8383F15B765E}.Release|x86.ActiveCfg = Release|Any CPU
 		{06AF377C-3062-41B4-97D1-8383F15B765E}.Release|x86.Build.0 = Release|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Debug|x64.Build.0 = Debug|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Debug|x86.Build.0 = Debug|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Release|x64.ActiveCfg = Release|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Release|x64.Build.0 = Release|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{30DA8EB7-782C-488A-BBBF-C0174B2DC4FF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

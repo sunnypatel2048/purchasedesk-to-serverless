@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The nightly export: a .NET Framework console program run by a Windows Scheduled Task on the legacy server.
+    Writes the previous day's approved order lines to a CSV file on the server's D: drive. Frozen after Phase 1.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PurchaseDesk.Export</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+</Project>
