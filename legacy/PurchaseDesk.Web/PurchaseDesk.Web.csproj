@@ -1,0 +1,20 @@
+<Project Sdk="MSBuild.SDK.SystemWeb/4.0.107">
+
+  <!-- PurchaseDesk legacy API: ASP.NET Web API 2 on .NET Framework 4.8, hosted by IIS. Frozen after Phase 1. -->
+  <PropertyGroup>
+    <RootNamespace>PurchaseDesk.Web</RootNamespace>
+    <!-- IIS reads binding redirects from Web.config, so the build writes them there. -->
+    <GeneratedBindingRedirectsAction>Overwrite</GeneratedBindingRedirectsAction>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Caching" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+<Project>
+  <!-- Shared by every legacy project (ADR-0002). -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <!--
+    When the .NET SDK builds (dotnet build / dotnet test, on a Mac or on Windows), compile only:
+    Visual Studio's Microsoft.WebApplication.targets and the AspNetCompiler task (MvcBuildViews) exist only in
+    Visual Studio's msbuild.exe. msbuild.exe ('Full') keeps both and produces the IIS layout.
+  -->
+  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
+    <WebApplicationsTargetPath>$(MSBuildThisFileDirectory)build/NoWebApplicationTargets.targets</WebApplicationsTargetPath>
+    <MvcBuildViews>false</MvcBuildViews>
+  </PropertyGroup>
+</Project>
