@@ -52,3 +52,6 @@ publish/
 notes/
 # Output of make up / make down.
 logs/
+
+# Build output of local spikes (zipped Lambda code)
+.build/
