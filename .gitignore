@@ -55,3 +55,6 @@ logs/
 
 # Build output of local spikes (zipped Lambda code)
 .build/
+
+# Packer build output (lists the new image id)
+packer-manifest.json
