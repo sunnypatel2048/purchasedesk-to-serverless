@@ -3,8 +3,9 @@
 #
 #   scripts/leftovers.sh        (or: make leftovers; CI runs it nightly with the read-only plan role)
 #
-# The rule: every resource is tagged Project=purchasedesk by the providers' default_tags. Only the bootstrap layer
-# (Layer=bootstrap) may exist between sessions; anything else tagged Project=purchasedesk is a leftover. Filtering
+# The rule: every resource is tagged Project=purchasedesk. Only the bootstrap layer (Layer=bootstrap) and the Windows
+# image (Layer=image: the AMI and its snapshot) may exist between sessions; anything else tagged Project=purchasedesk
+# is a leftover, including an instance left by a crashed image build (Layer=image-build). Filtering
 # on this project's tag means another project in the same account can never show up here.
 # Resource types that cannot carry tags (some CloudFront and network objects) get their own checks in Phase 4.
 #
@@ -33,12 +34,12 @@ check() { # check <name> <command...>
   total=$((total + count))
 }
 
-# Tagged resources outside the bootstrap layer. The tagging API keeps terminated EC2 instances visible for a while,
+# Tagged resources outside the persistent layers. The tagging API keeps terminated EC2 instances visible for a while,
 # so instances are counted separately, by state.
 tagged_not_bootstrap() {
   aws resourcegroupstaggingapi get-resources --region "$REGION" \
     --tag-filters "Key=Project,Values=$PROJECT" \
-    --query "ResourceTagMappingList[?length(Tags[?Key=='Layer' && Value=='bootstrap']) == \`0\`].ResourceARN" \
+    --query "ResourceTagMappingList[?length(Tags[?Key=='Layer' && (Value=='bootstrap' || Value=='image')]) == \`0\`].ResourceARN" \
     --output text | tr '\t' '\n' | { grep -v ':instance/' || true; }
 }
 
@@ -48,8 +49,8 @@ running_instances() {
     --query 'Reservations[].Instances[].InstanceId' --output text
 }
 
-echo "Leftovers check for $PROJECT in $REGION (anything tagged Project=$PROJECT outside the bootstrap layer):"
-check "tagged resources (not bootstrap)" tagged_not_bootstrap
+echo "Leftovers check for $PROJECT in $REGION (anything tagged Project=$PROJECT outside the bootstrap and image layers):"
+check "tagged resources (not bootstrap or image)" tagged_not_bootstrap
 check "EC2 instances (not terminated)" running_instances
 
 echo "RESULT leftovers total=$total status=$([[ $total -eq 0 ]] && echo PASS || echo FAIL)"
