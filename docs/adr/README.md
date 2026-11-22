@@ -16,3 +16,4 @@ Format: [Michael Nygard's ADR template](https://cognitect.com/blog/2011/11/15/do
 | [0008](0008-prebuilt-windows-image.md) | A pre-built Windows image, made with Packer |
 | [0009](0009-golden-files-define-equivalent.md) | Recorded legacy responses (golden files) define "equivalent" |
 | [0010](0010-releases-keyed-by-commit.md) | Releases keyed by commit, with a latest pointer in S3 |
+| [0011](0011-private-network-without-nat.md) | A private network without NAT: gateway endpoints, two interface endpoints in one zone |

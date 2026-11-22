@@ -36,6 +36,15 @@ instead. Each later phase adds to this file.
 - Accepted: no customer-managed KMS key (about $1/month each) and no access-log bucket. CloudTrail records
   configuration changes. Production would add both.
 
+## Network
+
+- No public subnets and no NAT gateway (ADR-0011): nothing in the VPC has an internet address or a route to the
+  internet. The internet gateway exists only because CloudFront VPC origins require one; no route uses it.
+- AWS services are reached through endpoints: S3 and DynamoDB gateway endpoints, and `ssm` and `ssmmessages`
+  interface endpoints that admit HTTPS from the VPC only. The VPC's default security group has no rules.
+- Accepted: no VPC flow logs, the default S3 endpoint policy, and interface endpoints in one zone. Production would
+  turn on flow logs, scope the endpoint policies and use both zones.
+
 ## Known limitations
 
 - The alerts SNS topic is not KMS-encrypted: CloudWatch alarms cannot publish to a topic using the AWS-managed

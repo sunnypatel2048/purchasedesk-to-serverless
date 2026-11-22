@@ -113,7 +113,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        layer: [bootstrap]
+        layer: [bootstrap, platform]
     env:
       TF_IN_AUTOMATION: "true"
       TF_INPUT: "false"
