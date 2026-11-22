@@ -26,6 +26,11 @@ are never managed by Terraform, because it would copy them into state.
 - The end state after decommissioning is the same code with less in it.
 - The AWS account ID stays out of the repo: `backend.hcl` is gitignored and only an example is committed.
 - The bootstrap layer must exist before CI can plan.
+- The AWS account is shared with another project (vibesense-on-eks), whose bootstrap layer owns the account's only
+  GitHub OIDC provider. This bootstrap layer reads it and never manages it. Destroying that project's bootstrap
+  layer would stop this project's CI roles working until the provider exists again.
+- Because both projects' CI plan roles have broad read access in the same account, this project's plan role
+  explicitly denies the other project's secrets and Terraform state ([security notes](../security.md)).
 
 ## Alternatives considered
 
