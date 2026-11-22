@@ -2,9 +2,14 @@
 # Packer build only: a WinRM HTTPS listener with a self-signed certificate, so Packer can reach the build instance.
 # Packer's temporary security group limits port 5986 to the machine running the build. cleanup.ps1 arranges for the
 # listener, certificate and firewall rule to be removed when an instance is first started from the image.
+#
+# No Set-ExecutionPolicy here: EC2Launch runs this script with a process-scope policy, so setting the machine policy
+# raises "overridden by a policy defined at a more specific scope", which Stop turns into an abort before the
+# listener exists. Packer's provisioners pass their own -ExecutionPolicy Bypass.
 $ErrorActionPreference = "Stop"
 
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force
+Set-Service -Name WinRM -StartupType Automatic
+Start-Service -Name WinRM
 
 $cert = New-SelfSignedCertificate -CertStoreLocation "Cert:\LocalMachine\My" -DnsName "packer-build" -FriendlyName "packer-build"
 
