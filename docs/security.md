@@ -15,6 +15,14 @@ instead. Each later phase adds to this file.
 - **The push role** can only write and read under `releases/` in the artifact bucket.
 - **The GitHub OIDC provider is shared** with another project in the same AWS account, which owns it. This project
   only reads it.
+- **Branch ruleset** (`.github/rulesets/main.json`, `make ruleset`): every change reaches `main` through a pull request;
+  "infra passed", "legacy passed" and "legacy/ and golden/ are frozen" must succeed, reported by GitHub Actions itself;
+  no force pushes or deletion of `main`; no bypass.
+- **Workflows**: every action pinned to a commit SHA and kept current by Dependabot; least-privilege `permissions`
+  per job; `pull_request`, never `pull_request_target`; fork and Dependabot pull requests are validated and linted but
+  never get AWS credentials. Plan comments list resource addresses and actions only, never values.
+- **Nightly leftovers check**: anything tagged `Project=purchasedesk` outside the bootstrap layer fails the run, using
+  the read-only role.
 
 ## Buckets
 
