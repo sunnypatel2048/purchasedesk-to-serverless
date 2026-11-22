@@ -2,15 +2,15 @@
 # The test job later gains the golden-file characterization tests (Phase 1.6).
 name: legacy
 
+# Runs on every pull request so "legacy passed" can be a required check (.github/rulesets/main.json); the Windows jobs
+# only do work when legacy/, golden/ or this file changed. A skipped job counts as passed.
 on:
   pull_request:
-    paths:
-      - "legacy/**"
-      - ".github/workflows/legacy.yml"
   push:
     branches: [main]
     paths:
       - "legacy/**"
+      - "golden/**"
       - ".github/workflows/legacy.yml"
   workflow_dispatch:
 
@@ -22,8 +22,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: detect legacy changes
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read # list the pull request's changed files
+    outputs:
+      legacy: ${{ steps.filter.outputs.legacy }}
+    steps:
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: filter
+        with:
+          filters: |
+            legacy:
+              - 'legacy/**'
+              - 'golden/**'
+              - '.github/workflows/legacy.yml'
+
   test:
     name: Database and API tests (SQL Server 2019)
+    needs: changes
+    # Pushes to main and manual runs always test; pull requests only when the legacy side changed.
+    if: ${{ !cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.legacy == 'true') }}
     # Matches the legacy server's OS (ADR-0002).
     runs-on: windows-2022
     timeout-minutes: 30
@@ -104,6 +125,8 @@ jobs:
 
   iis-build:
     name: Build with Visual Studio MSBuild (IIS layout)
+    needs: changes
+    if: ${{ !cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.legacy == 'true') }}
     runs-on: windows-2022
     timeout-minutes: 15
     defaults:
@@ -127,3 +150,15 @@ jobs:
           Write-Host "WebApplicationsTargetPath: $targets"
           if ($targets -like '*NoWebApplicationTargets*') { throw "The stub was used instead of Visual Studio's targets" }
           if (-not (Test-Path $targets)) { throw "Web application targets not found at $targets" }
+
+  # The one check the ruleset requires from this workflow. Skipped jobs (nothing on the legacy side changed) pass.
+  result:
+    name: legacy passed
+    needs: [changes, test, iis-build]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Nothing failed or was cancelled
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'all(.[]; .result == "success" or .result == "skipped")' <<<"$NEEDS"
