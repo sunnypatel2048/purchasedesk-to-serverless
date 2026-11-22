@@ -34,13 +34,14 @@ check() { # check <name> <command...>
   total=$((total + count))
 }
 
-# Tagged resources outside the persistent layers. The tagging API keeps terminated EC2 instances visible for a while,
-# so instances are counted separately, by state.
+# Tagged resources outside the persistent layers. The tagging API keeps deleted EC2 instances, volumes and network
+# interfaces visible for an hour or more after they are gone (seen after the Phase 3.3 image build), so those three
+# are counted separately below, from EC2 itself, which lists only what still exists.
 tagged_not_bootstrap() {
   aws resourcegroupstaggingapi get-resources --region "$REGION" \
     --tag-filters "Key=Project,Values=$PROJECT" \
     --query "ResourceTagMappingList[?length(Tags[?Key=='Layer' && (Value=='bootstrap' || Value=='image')]) == \`0\`].ResourceARN" \
-    --output text | tr '\t' '\n' | { grep -v ':instance/' || true; }
+    --output text | tr '\t' '\n' | { grep -v -E ':(instance|volume|network-interface)/' || true; }
 }
 
 running_instances() {
@@ -49,9 +50,23 @@ running_instances() {
     --query 'Reservations[].Instances[].InstanceId' --output text
 }
 
+existing_volumes() {
+  aws ec2 describe-volumes --region "$REGION" \
+    --filters "Name=tag:Project,Values=$PROJECT" \
+    --query 'Volumes[].VolumeId' --output text
+}
+
+existing_network_interfaces() {
+  aws ec2 describe-network-interfaces --region "$REGION" \
+    --filters "Name=tag:Project,Values=$PROJECT" \
+    --query 'NetworkInterfaces[].NetworkInterfaceId' --output text
+}
+
 echo "Leftovers check for $PROJECT in $REGION (anything tagged Project=$PROJECT outside the bootstrap and image layers):"
 check "tagged resources (not bootstrap or image)" tagged_not_bootstrap
 check "EC2 instances (not terminated)" running_instances
+check "EBS volumes" existing_volumes
+check "network interfaces" existing_network_interfaces
 
 echo "RESULT leftovers total=$total status=$([[ $total -eq 0 ]] && echo PASS || echo FAIL)"
 [[ $total -eq 0 ]]
