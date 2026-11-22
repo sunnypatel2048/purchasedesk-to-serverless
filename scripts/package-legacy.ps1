@@ -75,10 +75,12 @@ if ($blocking.Count -gt 0) { throw "High or Critical vulnerabilities in shipped 
 
 # ------------------------------------------------------------------ web: the IIS site folder
 $web = Join-Path $staging 'web'
+# Without a publish profile, DeployOnBuild runs the "Package" target (a Web Deploy zip under obj\) and ignores
+# PublishUrl; DeployDefaultTarget=WebPublish makes it copy the site to PublishUrl instead.
 Invoke-Checked 'Web publish' {
     & $msbuild (Join-Path $legacy 'PurchaseDesk.Web/PurchaseDesk.Web.csproj') /restore /nologo /v:minimal `
-        /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem `
-        /p:PublishUrl="$web" /p:DeleteExistingFiles=true
+        /p:Configuration=Release /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish `
+        /p:WebPublishMethod=FileSystem /p:PublishUrl="$web" /p:DeleteExistingFiles=true
 }
 
 # The layout IIS needs, and nothing that should not ship.
