@@ -1,0 +1,136 @@
+# Packages the legacy release and publishes it to the artifact bucket, keyed by commit (ADR-0010).
+#
+#   pull request   package and scan only, kept as an Actions artifact: packaging is proven before merge, nothing
+#                  reaches AWS
+#   push to main   package, scan, then publish releases/<commit>/ and move releases/legacy-latest.json to it
+#   manual run     the same as a push, on main
+#
+# A release is immutable: every object is written with a conditional put (If-None-Match: *), so nothing that exists
+# is ever overwritten. Only the latest pointer is replaced. The Phase 4 boot script checks each zip against the
+# SHA-256 in manifest.json before using it.
+#
+# Publishing uses purchasedesk-ci-push through OIDC, which only jobs on main can assume and which can only read and
+# write releases/* in the artifact bucket (infra/bootstrap/github-oidc.tf). The bucket name contains the account ID,
+# so it is a GitHub secret, which GitHub masks in logs.
+name: release
+
+on:
+  pull_request:
+    paths:
+      - "legacy/**"
+      - "scripts/package-legacy.ps1"
+      - ".github/workflows/release.yml"
+  push:
+    branches: [main]
+    paths:
+      - "legacy/**"
+      - "scripts/package-legacy.ps1"
+      - ".github/workflows/release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Releases on main run one at a time and are never cancelled halfway; pull request runs replace each other.
+concurrency:
+  group: release-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  package:
+    name: package the legacy release
+    # The legacy server's OS (ADR-0002), with Visual Studio's MSBuild for the IIS layout.
+    runs-on: windows-2022
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build, scan and package
+        env:
+          # The commit being released: the pull request's head, or the pushed commit on main.
+          COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: ./scripts/package-legacy.ps1 -Commit $env:COMMIT -OutDir artifacts/release
+
+      - name: Keep the package as a build artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: legacy-release
+          path: artifacts/release
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: publish to the artifact bucket
+    needs: package
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write # exchange GitHub's OIDC token for the push role's credentials
+    env:
+      COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: legacy-release
+          path: release
+
+      - name: Check the package against its manifest
+        working-directory: release
+        run: |
+          jq -e --arg c "$COMMIT" '.commit == $c' manifest.json > /dev/null || { echo "manifest.json is for another commit"; exit 1; }
+          jq -e '.vulnerability_scan.high_or_critical == 0' manifest.json > /dev/null || { echo "manifest records High or Critical findings"; exit 1; }
+          jq -r '.files | to_entries[] | "\(.value.sha256)  \(.key)"' manifest.json | sha256sum --check --strict
+
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.AWS_PUSH_ROLE_ARN }}
+          aws-region: us-east-1
+          mask-aws-account-id: true
+          role-session-name: release-${{ github.run_id }}
+
+      - name: Upload releases/<commit>/ (never overwrites) and move the latest pointer
+        working-directory: release
+        env:
+          BUCKET: ${{ secrets.ARTIFACT_BUCKET }}
+        run: |
+          prefix="releases/$COMMIT"
+
+          # A re-run for a commit that is already released changes nothing, including the pointer, which may
+          # have moved on to a newer commit since.
+          if aws s3api head-object --bucket "$BUCKET" --key "$prefix/manifest.json" > /dev/null 2>&1; then
+            echo "RESULT release commit=$COMMIT status=already-published (nothing changed)"
+            exit 0
+          fi
+
+          put() { # put <key> <file> [extra args]: create only, never replace
+            aws s3api put-object --bucket "$BUCKET" --key "$1" --body "$2" --if-none-match '*' \
+              --checksum-algorithm SHA256 "${@:3}" > /dev/null
+            echo "uploaded $1"
+          }
+
+          # The zips first and the manifest last: a manifest means the release is complete.
+          for zip in $(jq -r '.files | keys[]' manifest.json); do
+            put "$prefix/$zip" "$zip" --content-type application/zip
+          done
+          put "$prefix/manifest.json" manifest.json --content-type application/json
+
+          jq -n --arg commit "$COMMIT" --arg key "$prefix/manifest.json" \
+            --arg sha "$(sha256sum manifest.json | cut -d' ' -f1)" \
+            --arg created "$(jq -r .created manifest.json)" \
+            '{commit: $commit, manifest_key: $key, manifest_sha256: $sha, created: $created}' > legacy-latest.json
+          aws s3api put-object --bucket "$BUCKET" --key releases/legacy-latest.json --body legacy-latest.json \
+            --content-type application/json --checksum-algorithm SHA256 > /dev/null
+
+          echo "RESULT release commit=$COMMIT status=published files=$(jq '.files | length' manifest.json)"
+          {
+            echo "### Legacy release \`$COMMIT\`"
+            echo
+            jq -r '.files | to_entries[] | "- `\(.key)` \(.value.bytes) bytes, sha256 `\(.value.sha256)`"' manifest.json
+          } >> "$GITHUB_STEP_SUMMARY"

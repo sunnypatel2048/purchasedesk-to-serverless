@@ -12,7 +12,12 @@ instead. Each later phase adds to this file.
   denies stop it reading secrets in Parameter Store (this project's and the other project's in the account), any
   Secrets Manager value, and the other project's Terraform state.
   Production would scope the read permissions to the resource types actually managed.
-- **The push role** can only write and read under `releases/` in the artifact bucket.
+- **The push role** can only write and read under `releases/` in the artifact bucket, and only jobs on `main` can
+  assume it.
+- **Releases** (`release.yml`, ADR-0010) are immutable: every object is created with a conditional put, so a
+  published release is never overwritten. Each zip's SHA-256 is in the release manifest and checked before upload
+  and before use. Shipped packages are scanned for known vulnerabilities; High or Critical stops the release.
+  Packages are not signed; production would add signed build provenance.
 - **The GitHub OIDC provider is shared** with another project in the same AWS account, which owns it. This project
   only reads it.
 - **Branch ruleset** (`.github/rulesets/main.json`, `make ruleset`): every change reaches `main` through a pull request;
@@ -21,8 +26,8 @@ instead. Each later phase adds to this file.
 - **Workflows**: every action pinned to a commit SHA and kept current by Dependabot; least-privilege `permissions`
   per job; `pull_request`, never `pull_request_target`; fork and Dependabot pull requests are validated and linted but
   never get AWS credentials. Plan comments list resource addresses and actions only, never values.
-- **Nightly leftovers check**: anything tagged `Project=purchasedesk` outside the bootstrap layer fails the run, using
-  the read-only role.
+- **Nightly leftovers check**: anything tagged `Project=purchasedesk` outside the bootstrap and image layers fails the
+  run, using the read-only role.
 
 ## Buckets
 
