@@ -35,6 +35,22 @@ rewritten.
 | T-SQL to retire | 249 lines | Non-blank, non-comment lines in `legacy/database/procedures/` | `legacy-v1` |
 | Legacy C# | about 800 lines | Non-blank, non-comment lines in `PurchaseDesk.Web` and `PurchaseDesk.Export` | `legacy-v1` |
 
+## Phases 3 and 4: the image and the legacy server on AWS (2026-11-22)
+
+| Measurement | Value | How | Evidence |
+|---|---|---|---|
+| Windows image build (`make image`) | 56 min (3,363 s): SQL Server download, checks and setup 19 min; saving the AMI about 30 min | Script timer and Packer timestamps; the first attempt stopped at 18 min (WinRM never came up, fixed) | PR #17 ([ADR-0008](adr/0008-prebuilt-windows-image.md)) |
+| Image checks before saving | 10 of 10 (SQL Server 15.0.4510.2 Developer, `@@SERVERNAME`, Windows auth only, replication agents, Agent, IIS, ASP.NET 4.8, .NET 528449, SSM agent) | `verify.ps1` RESULT lines | PR #17 |
+| Image snapshot | 31.6 GB used of 40 GB | `FullSnapshotSizeInBytes` | PR #17 |
+| Legacy server: launch to registered with Systems Manager | about 3 min | Polling `describe-instance-information`; no NAT, no `ec2messages` endpoint ([ADR-0011](adr/0011-private-network-without-nat.md)) | Phase 4.2 session |
+| Legacy server: launch to ready (boot script passed) | about 9.5 min; the boot script itself 353 s | Boot script RESULT lines ([ADR-0012](adr/0012-legacy-server-configured-by-ssm.md)) | Phase 4.2 session |
+| Boot script re-run on the same server | 150 s, database kept, seed check skipped | Second association run | Phase 4.2 session |
+| Golden `write-01-create` replayed on the server | Identical key fields: 201, id 2001, total 6.7500, line amounts 2.3500 and 4.4000 | `AWS-RunPowerShellScript` on the instance | Phase 4.2 session |
+| Memory on `t3.medium` (4 GB), SQL Server capped at 1.5 GB | 1.2 to 1.3 GB free right after boot, 2.5 GB free a few minutes later; SQL Server working set 294 MB, IIS 80 MB | `Win32_OperatingSystem`, process working sets | Phase 4.2 session |
+| CPU credits, unlimited mode | Balance started at 0.0; 0.26 surplus credits during boot, repaid within 5 min; `CPUSurplusCreditsCharged` 0 | CloudWatch, 5-minute periods | Phase 4.2 session |
+| Platform destroy (network and legacy server) | 187 s; interface endpoints took up to 2m21s | Terraform "complete after" | Phase 4.2 session |
+| Tag listings after that destroy | 11 deleted EC2 resources still listed by both the tagging API and `describe-tags`; each answered NotFound when described | Leftovers check, then per-resource describe calls | Phase 4.2 session |
+
 ## Behaviour differences caught
 
 | Found | Behaviour | Legacy | New system |

@@ -57,7 +57,7 @@ resource "aws_security_group" "legacy" {
 resource "aws_vpc_security_group_ingress_rule" "http_from_cloudfront" {
   #checkov:skip=CKV_AWS_260:The source is CloudFront's managed prefix list, not 0.0.0.0/0; the check cannot see prefix lists
   security_group_id = aws_security_group.legacy.id
-  description       = "HTTP from CloudFront's origin-facing servers (the VPC origin)"
+  description       = "HTTP from CloudFront origin-facing servers (the VPC origin)" # EC2 rejects apostrophes here
   ip_protocol       = "tcp"
   from_port         = 80
   to_port           = 80
@@ -215,16 +215,28 @@ resource "aws_ssm_document" "boot" {
   })
 }
 
-# Runs boot.ps1 once the instance is online, and again whenever the document changes (a new release). Terraform
-# waits for success: a failed or slow boot fails the apply, and the script's output is kept by Systems Manager.
+# Runs boot.ps1 once the instance is online, and again whenever the document changes (a new release). Systems
+# Manager keeps the script's output.
+#
+# No wait_for_success_timeout_seconds: it reported Success 8 seconds after creation, before the instance had even
+# registered with Systems Manager (Phase 4.2). The wait below is the ready signal instead.
 resource "aws_ssm_association" "boot" {
-  name                             = aws_ssm_document.boot.name
-  document_version                 = aws_ssm_document.boot.latest_version
-  association_name                 = "${var.name}-legacy-boot"
-  wait_for_success_timeout_seconds = var.boot_timeout_seconds
+  name             = aws_ssm_document.boot.name
+  document_version = aws_ssm_document.boot.latest_version
+  association_name = "${var.name}-legacy-boot"
 
   targets {
     key    = "InstanceIds"
     values = [aws_instance.legacy.id]
+  }
+}
+
+# Holds the apply until this association's current version has run on this instance, prints the boot script's
+# RESULT lines, and fails the apply if the script failed. Runs again for a new instance or a new document version.
+resource "terraform_data" "boot_wait" {
+  triggers_replace = [aws_instance.legacy.id, aws_ssm_association.boot.association_id, aws_ssm_document.boot.latest_version]
+
+  provisioner "local-exec" {
+    command = "${path.root}/../../scripts/wait-for-legacy-boot.sh ${aws_instance.legacy.id} ${aws_ssm_association.boot.association_id} ${var.boot_timeout_seconds}"
   }
 }
