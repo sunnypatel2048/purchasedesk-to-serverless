@@ -43,8 +43,13 @@ configures IIS and the scheduled task (Phase 4).
   a month for 25-35 GB.
 - A broken image build blocks Phase 4; the fallback is install-at-boot from installer media cached in the
   artifact bucket.
-- The legacy instance uses standard CPU credits: surplus T3 credits on Windows cost $0.096 per vCPU-hour, which a busy
-  boot could turn into a doubled session cost.
+- The legacy instance uses unlimited CPU credits. Surplus T3 credits on Windows cost $0.096 per vCPU-hour, but a
+  session repays most of the boot burst from credits earned while idle; the worst case is a few cents a session.
+
+**Correction (Phase 4.2).** This record first said the legacy instance would use standard credits, to avoid surplus
+charges. A new T3 in standard mode starts with no credits (T3 instances get no launch credits), so every boot would
+run at the 20% baseline, several times slower. The instance uses unlimited credits instead (ADR-0012), and the first
+session records `CPUSurplusCreditsCharged`.
 
 ## Alternatives considered
 

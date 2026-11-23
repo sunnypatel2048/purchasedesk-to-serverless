@@ -23,6 +23,11 @@ output "private_route_table_id" {
   value       = aws_route_table.private.id
 }
 
+output "s3_prefix_list_id" {
+  description = "Prefix list of the S3 gateway endpoint, for security group rules (null without an S3 endpoint)."
+  value       = try(aws_vpc_endpoint.gateway["s3"].prefix_list_id, null)
+}
+
 output "endpoint_security_group_id" {
   description = "Security group of the interface endpoints."
   value       = aws_security_group.endpoints.id

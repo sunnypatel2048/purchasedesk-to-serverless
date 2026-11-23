@@ -1,7 +1,7 @@
 # PurchaseDesk to Serverless: one entry point for the project's commands.
 # Later phases add up, down, status, migrate and the rest.
 
-.PHONY: help lint-infra leftovers ruleset image
+.PHONY: help lint-infra leftovers ruleset image secrets
 
 TFLINT = tflint --config "$(CURDIR)/infra/.tflint.hcl"
 
@@ -22,6 +22,9 @@ leftovers:  ## list anything this project left running in AWS (uses the current 
 
 image:  ## build the legacy server's Windows image with Packer and keep only the newest (about an hour; uses the current AWS credentials)
 	scripts/build-image.sh
+
+secrets:  ## create the application secrets in Parameter Store if missing; never changes or prints existing ones (uses the current AWS credentials)
+	scripts/secrets.sh
 
 ruleset:  ## apply .github/rulesets/main.json to the GitHub repository (branch protection as code)
 	scripts/apply-ruleset.sh
