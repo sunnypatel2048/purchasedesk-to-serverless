@@ -17,3 +17,4 @@ Format: [Michael Nygard's ADR template](https://cognitect.com/blog/2011/11/15/do
 | [0009](0009-golden-files-define-equivalent.md) | Recorded legacy responses (golden files) define "equivalent" |
 | [0010](0010-releases-keyed-by-commit.md) | Releases keyed by commit, with a latest pointer in S3 |
 | [0011](0011-private-network-without-nat.md) | A private network without NAT: gateway endpoints, two interface endpoints in one zone |
+| [0012](0012-legacy-server-configured-by-ssm.md) | The legacy server is configured by a Systems Manager association, which Terraform waits for |

@@ -1,0 +1,195 @@
+# Configures the legacy server from release ${commit} (ADR-0012). Run by a Systems Manager association as SYSTEM, in
+# Windows PowerShell 5.1; Terraform waits for it to succeed, so a finished `terraform apply` means the server is ready.
+# One RESULT line per step; the first failure stops the script with exit code 1. Safe to run again: steps that are
+# already done are skipped or repeated harmlessly. Rendered by Terraform: values in dollar-brace form are filled in.
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+
+$Region       = '${region}'
+$Bucket       = '${bucket}'
+$Commit       = '${commit}'
+$Files        = '${files_json}' | ConvertFrom-Json   # zip name -> SHA-256, read from the release manifest by Terraform
+$ApiKeyName   = '${api_key_parameter}'
+$SqlMaxMemory = ${sql_max_memory_mb}
+
+$Root      = 'C:\purchasedesk'
+$Release   = Join-Path $Root "releases\$Commit"
+$Site      = 'C:\inetpub\purchasedesk'
+$ExportDir = Join-Path $Root 'export'
+$AppPool   = 'PurchaseDesk'
+$PoolUser  = "IIS APPPOOL\$AppPool"
+$TaskUser  = 'NT AUTHORITY\NETWORK SERVICE'
+$TaskName  = 'PurchaseDesk nightly export'
+$Step      = 'start'
+$Started   = Get-Date
+
+New-Item -ItemType Directory -Force -Path 'C:\ProgramData\purchasedesk' | Out-Null
+Start-Transcript -Path 'C:\ProgramData\purchasedesk\boot.log' -Append | Out-Null
+
+function Result([string]$name, [string]$detail) { Write-Output "RESULT $name $detail" }
+
+function Invoke-Sql([string]$database, [string]$sql) {
+    $connection = New-Object System.Data.SqlClient.SqlConnection "Server=localhost;Database=$database;Integrated Security=true;Connect Timeout=60"
+    $connection.Open()
+    try {
+        $command = $connection.CreateCommand()
+        $command.CommandText = $sql
+        $command.CommandTimeout = 120
+        return $command.ExecuteScalar()
+    } finally { $connection.Close() }
+}
+
+function Invoke-Native([string]$what, [scriptblock]$command) {
+    & $command
+    if ($LASTEXITCODE -ne 0) { throw "$what failed (exit $LASTEXITCODE)" }
+}
+
+function Get-Status([string]$url, [hashtable]$headers) {
+    try {
+        return [int](Invoke-WebRequest -Uri $url -Headers $headers -UseBasicParsing -TimeoutSec 120).StatusCode
+    } catch [System.Net.WebException] {
+        if ($_.Exception.Response) { return [int]$_.Exception.Response.StatusCode }
+        throw
+    }
+}
+
+try {
+    # ---------------------------------------------------------------- 1. D: drive (the legacy configs log and export there)
+    $Step = 'data-drive'
+    if (-not (Get-Volume -DriveLetter D -ErrorAction SilentlyContinue)) {
+        $disk = Get-Disk | Where-Object PartitionStyle -eq 'RAW' | Select-Object -First 1
+        if (-not $disk) { throw 'No raw disk found for D:' }
+        Initialize-Disk -Number $disk.Number -PartitionStyle GPT -PassThru |
+            New-Partition -DriveLetter D -UseMaximumSize |
+            Format-Volume -FileSystem NTFS -NewFileSystemLabel 'Data' -Confirm:$false | Out-Null
+    }
+    Result 'data-drive' "free_gb=$([math]::Round((Get-Volume -DriveLetter D).SizeRemaining / 1GB, 1)) status=PASS"
+
+    # ---------------------------------------------------------------- 2. release: download, check SHA-256, unpack
+    $Step = 'release'
+    Import-Module AWSPowerShell
+    $download = Join-Path $Root "downloads\$Commit"
+    New-Item -ItemType Directory -Force -Path $download | Out-Null
+    foreach ($entry in $Files.PSObject.Properties) {
+        $zip = Join-Path $download $entry.Name
+        Read-S3Object -BucketName $Bucket -Key "releases/$Commit/$($entry.Name)" -File $zip -Region $Region | Out-Null
+        $actual = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($actual -ne $entry.Value) { throw "$($entry.Name): SHA-256 $actual does not match the manifest" }
+        $part = $entry.Name -replace '^legacy-', '' -replace '\.zip$', ''
+        Expand-Archive -Path $zip -DestinationPath (Join-Path $Release $part) -Force
+    }
+    Result 'release' "commit=$Commit files=$(@($Files.PSObject.Properties).Count) sha256=verified status=PASS"
+
+    # ---------------------------------------------------------------- 3. SQL Server: name, memory cap, database, seed facts
+    $Step = 'sql-server'
+    if (-not (Get-Command sqlcmd -ErrorAction SilentlyContinue)) { throw 'sqlcmd not found: load.ps1 and the seed check need it' }
+    $serverName = Invoke-Sql 'master' 'SELECT @@SERVERNAME'
+    if ($serverName -ne $env:COMPUTERNAME) {
+        # Replication (and so DMS) needs @@SERVERNAME to match the computer name (ADR-0008).
+        Invoke-Sql 'master' "EXEC sp_dropserver N'$serverName'; EXEC sp_addserver N'$($env:COMPUTERNAME)', 'local';" | Out-Null
+        Restart-Service -Name MSSQLSERVER -Force
+        Start-Service -Name SQLSERVERAGENT
+        $serverName = Invoke-Sql 'master' 'SELECT @@SERVERNAME'
+        if ($serverName -ne $env:COMPUTERNAME) { throw "@@SERVERNAME is $serverName after the fix, expected $($env:COMPUTERNAME)" }
+    }
+    Invoke-Sql 'master' "EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'max server memory (MB)', $SqlMaxMemory; RECONFIGURE;" | Out-Null
+
+    $loaded = 'existing'
+    if ((Invoke-Sql 'master' "SELECT ISNULL(DB_ID(N'PurchaseDesk'), 0)") -eq 0) {
+        & (Join-Path $Release 'database\load.ps1')
+        $loaded = 'loaded'
+    }
+
+    # The same check CI runs: the seed must produce exactly the facts in seed-expected.txt.
+    $facts = sqlcmd -S localhost -E -b -d PurchaseDesk -h -1 -W -i (Join-Path $Release 'database\checks\seed-facts.sql')
+    if ($LASTEXITCODE -ne 0) { throw 'seed-facts.sql failed' }
+    $facts = @($facts | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
+    $expected = @(Get-Content (Join-Path $Release 'database\seed-expected.txt') | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
+    if (Compare-Object $expected $facts -CaseSensitive) { throw 'Seed facts differ from seed-expected.txt' }
+    Result 'sql-server' "servername=$serverName max_memory_mb=$SqlMaxMemory database=$loaded seed_facts=$($expected.Count) status=PASS"
+
+    # ---------------------------------------------------------------- 4. folders on D: and their permissions
+    $Step = 'folders'
+    foreach ($folder in 'D:\Logs\PurchaseDesk', 'D:\Exports\PurchaseDesk') { New-Item -ItemType Directory -Force -Path $folder | Out-Null }
+
+    # ---------------------------------------------------------------- 5. IIS: the site, its app pool, the API key
+    $Step = 'iis'
+    Import-Module WebAdministration
+    if (Test-Path 'IIS:\Sites\Default Web Site') { Remove-Website -Name 'Default Web Site' }
+    if (-not (Test-Path "IIS:\AppPools\$AppPool")) { New-WebAppPool -Name $AppPool | Out-Null }
+    Set-ItemProperty "IIS:\AppPools\$AppPool" -Name managedRuntimeVersion -Value 'v4.0'
+    Set-ItemProperty "IIS:\AppPools\$AppPool" -Name managedPipelineMode -Value 'Integrated'
+    Set-ItemProperty "IIS:\AppPools\$AppPool" -Name processModel.identityType -Value 'ApplicationPoolIdentity'
+
+    & robocopy (Join-Path $Release 'web') $Site /MIR /NFL /NDL /NJH /NJS /NP | Out-Null
+    if ($LASTEXITCODE -ge 8) { throw "Copying the site failed (robocopy exit $LASTEXITCODE)" }
+
+    # A legacy trait by design: the real API key lives in Web.config, written here from Parameter Store.
+    $apiKey = (Get-SSMParameter -Name $ApiKeyName -WithDecryption $true -Region $Region).Value
+    if (-not $apiKey) { throw "Parameter $ApiKeyName is empty (run make secrets)" }
+    $webConfigPath = Join-Path $Site 'Web.config'
+    [xml]$webConfig = Get-Content $webConfigPath -Raw
+    $webConfig.SelectSingleNode("/configuration/appSettings/add[@key='ApiKey']").SetAttribute('value', $apiKey)
+    $webConfig.Save($webConfigPath)
+
+    if (-not (Test-Path 'IIS:\Sites\PurchaseDesk')) {
+        New-Website -Name 'PurchaseDesk' -Port 80 -PhysicalPath $Site -ApplicationPool $AppPool | Out-Null
+    }
+    Start-WebAppPool -Name $AppPool -ErrorAction SilentlyContinue
+    Invoke-Native 'Granting the app pool D:\Logs' { icacls 'D:\Logs\PurchaseDesk' /grant "$($PoolUser):(OI)(CI)M" /Q }
+    Result 'iis' "site=PurchaseDesk port=80 app_pool=$AppPool status=PASS"
+
+    # ---------------------------------------------------------------- 6. SQL logins: EXECUTE only, never sysadmin
+    $Step = 'sql-logins'
+    foreach ($login in $PoolUser, $TaskUser) {
+        Invoke-Sql 'master' "IF SUSER_ID(N'$login') IS NULL CREATE LOGIN [$login] FROM WINDOWS;" | Out-Null
+        # The app calls only stored procedures, so EXECUTE on the schema (procedures and the table type) is enough.
+        Invoke-Sql 'PurchaseDesk' "IF USER_ID(N'$login') IS NULL CREATE USER [$login] FOR LOGIN [$login]; GRANT EXECUTE ON SCHEMA::dbo TO [$login];" | Out-Null
+    }
+    Result 'sql-logins' "logins=2 permission=EXECUTE status=PASS"
+
+    # ---------------------------------------------------------------- 7. nightly export: a scheduled task as Network Service
+    $Step = 'export-task'
+    & robocopy (Join-Path $Release 'export') $ExportDir /MIR /NFL /NDL /NJH /NJS /NP | Out-Null
+    if ($LASTEXITCODE -ge 8) { throw "Copying the export program failed (robocopy exit $LASTEXITCODE)" }
+    foreach ($folder in 'D:\Logs\PurchaseDesk', 'D:\Exports\PurchaseDesk') {
+        Invoke-Native "Granting Network Service $folder" { icacls $folder /grant "$($TaskUser):(OI)(CI)M" /Q }
+    }
+    $action = New-ScheduledTaskAction -Execute (Join-Path $ExportDir 'PurchaseDesk.Export.exe') -WorkingDirectory $ExportDir
+    $trigger = New-ScheduledTaskTrigger -Daily -At '1:30am'
+    $principal = New-ScheduledTaskPrincipal -UserId $TaskUser -LogonType ServiceAccount
+    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null
+    Result 'export-task' "task='$TaskName' daily_at=01:30 user='$TaskUser' status=PASS"
+
+    # ---------------------------------------------------------------- 8. smoke tests
+    $Step = 'smoke'
+    $withKey = 0
+    for ($attempt = 1; $attempt -le 10 -and $withKey -ne 200; $attempt++) {
+        $withKey = Get-Status 'http://localhost/api/suppliers' @{ 'X-Api-Key' = $apiKey }
+        if ($withKey -ne 200) { Start-Sleep -Seconds 6 }
+    }
+    $withoutKey = Get-Status 'http://localhost/api/suppliers' @{}
+    if ($withKey -ne 200 -or $withoutKey -ne 401) { throw "API answered $withKey with the key and $withoutKey without (expected 200 and 401)" }
+
+    # The real task, as Network Service: yesterday's export (an empty day still writes the header).
+    Start-ScheduledTask -TaskName $TaskName
+    $deadline = (Get-Date).AddMinutes(3)
+    do { Start-Sleep -Seconds 3; $task = Get-ScheduledTask -TaskName $TaskName } while ($task.State -eq 'Running' -and (Get-Date) -lt $deadline)
+    $exitCode = (Get-ScheduledTaskInfo -TaskName $TaskName).LastTaskResult
+    $exportFile = 'D:\Exports\PurchaseDesk\approved-orders-' + (Get-Date).AddDays(-1).ToString('yyyyMMdd') + '.csv'
+    if ($exitCode -ne 0 -or -not (Test-Path $exportFile)) { throw "Export task exit $exitCode, file present: $(Test-Path $exportFile)" }
+    Result 'smoke' "api_with_key=$withKey api_without_key=$withoutKey export_exit=$exitCode status=PASS"
+
+    # ---------------------------------------------------------------- 9. report
+    $os = Get-CimInstance Win32_OperatingSystem
+    $freeMb = [math]::Round($os.FreePhysicalMemory / 1KB)
+    $totalMb = [math]::Round($os.TotalVisibleMemorySize / 1KB)
+    Result 'memory' "total_mb=$totalMb free_mb=$freeMb sql_max_mb=$SqlMaxMemory"
+    Result 'boot' "commit=$Commit seconds=$([math]::Round(((Get-Date) - $Started).TotalSeconds)) status=PASS"
+    Stop-Transcript | Out-Null
+    exit 0
+} catch {
+    Result 'boot' "step=$Step status=FAIL error=$($_.Exception.Message)"
+    Stop-Transcript | Out-Null
+    exit 1
+}

@@ -45,6 +45,20 @@ instead. Each later phase adds to this file.
 - Accepted: no VPC flow logs, the default S3 endpoint policy, and interface endpoints in one zone. Production would
   turn on flow logs, scope the endpoint policies and use both zones.
 
+## Legacy server
+
+- Private subnet, no public address, no key pair, IMDSv2 only, encrypted disks. No RDP or WinRM: the build's WinRM
+  listener is removed on first start, and administration is through Systems Manager.
+- Its security group admits HTTP only from CloudFront's origin-facing prefix list, and allows HTTPS out only to the
+  VPC (the endpoints) and the S3 prefix list.
+- Its role can read only its own release and the API key parameter. An explicit deny stops the AWS-managed
+  `AmazonSSMManagedInstanceCore` policy reading any other parameter, including another project's secrets.
+- SQL logins for the IIS app pool and the export task (Network Service) have EXECUTE on the procedures only; neither
+  is a sysadmin. SQL Server accepts Windows authentication only.
+- Application secrets come from `make secrets`: SecureString parameters, created once, never in Terraform or its
+  state, never printed. The other project's CI plan role should deny `/purchasedesk/secrets/*` as this project's
+  denies its secrets (a change in that repository).
+
 ## Known limitations
 
 - The alerts SNS topic is not KMS-encrypted: CloudWatch alarms cannot publish to a topic using the AWS-managed
