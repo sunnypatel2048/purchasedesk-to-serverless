@@ -100,13 +100,18 @@ try {
         $loaded = 'loaded'
     }
 
-    # The same check CI runs: the seed must produce exactly the facts in seed-expected.txt.
-    $facts = sqlcmd -S localhost -E -b -d PurchaseDesk -h -1 -W -i (Join-Path $Release 'database\checks\seed-facts.sql')
-    if ($LASTEXITCODE -ne 0) { throw 'seed-facts.sql failed' }
-    $facts = @($facts | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
-    $expected = @(Get-Content (Join-Path $Release 'database\seed-expected.txt') | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
-    if (Compare-Object $expected $facts -CaseSensitive) { throw 'Seed facts differ from seed-expected.txt' }
-    Result 'sql-server' "servername=$serverName max_memory_mb=$SqlMaxMemory database=$loaded seed_facts=$($expected.Count) status=PASS"
+    # The same check CI runs: a freshly loaded seed must produce exactly the facts in seed-expected.txt. Only right
+    # after loading: on a re-run the database holds the session's own writes, so the facts have moved on.
+    $seedFacts = 'skipped'
+    if ($loaded -eq 'loaded') {
+        $facts = sqlcmd -S localhost -E -b -d PurchaseDesk -h -1 -W -i (Join-Path $Release 'database\checks\seed-facts.sql')
+        if ($LASTEXITCODE -ne 0) { throw 'seed-facts.sql failed' }
+        $facts = @($facts | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
+        $expected = @(Get-Content (Join-Path $Release 'database\seed-expected.txt') | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
+        if (Compare-Object $expected $facts -CaseSensitive) { throw 'Seed facts differ from seed-expected.txt' }
+        $seedFacts = $expected.Count
+    }
+    Result 'sql-server' "servername=$serverName max_memory_mb=$SqlMaxMemory database=$loaded seed_facts=$seedFacts status=PASS"
 
     # ---------------------------------------------------------------- 4. folders on D: and their permissions
     $Step = 'folders'

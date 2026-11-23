@@ -17,12 +17,19 @@ new instance might never run. User data also leaves no easy way to see the scrip
 - Terraform creates an **SSM Command document** holding `infra/modules/legacy/boot.ps1.tftpl`, rendered with the
   release commit, the zips' SHA-256 (read by Terraform from the release manifest), the bucket and the API key
   parameter's name, and an **association** that runs it on the instance once Systems Manager can reach it.
-- Terraform **waits for the association to succeed** (`wait_for_success_timeout_seconds`, 30 minutes). A finished
-  `terraform apply` therefore means the server answers on port 80; a failed boot fails the apply.
-- The script writes one `RESULT` line per step. Systems Manager keeps the output of each run
-  (`aws ssm list-command-invocations --details`), and the script also keeps a transcript on the server.
-- A new release changes the document, so the association runs again. The script is safe to repeat: the D: drive,
-  the database and the logins are created only when missing.
+- Terraform **waits for the boot script to finish**: a `terraform_data` resource runs
+  `scripts/wait-for-legacy-boot.sh`, which waits until this instance reports the association's current version as
+  Success or Failed (30 minutes at most), prints the script's `RESULT` lines and fails the apply if the script failed.
+  A finished `terraform apply` therefore means the server answers on port 80.
+- The script writes one `RESULT` line per step. Systems Manager keeps the output of each run, and the script also
+  keeps a transcript on the server.
+- A new release changes the document, so the association runs again, and so does the wait. The script is safe to
+  repeat: the D: drive, the database and the logins are created only when missing, and the seed-facts check runs only
+  right after a fresh load.
+
+**Correction (Phase 4.2 session).** This record first said Terraform's `wait_for_success_timeout_seconds` on the
+association would be the wait. In the first session it reported Success 8 seconds after creation, with no targets
+run: the instance had not yet registered with Systems Manager. The wait script replaced it.
 
 The script, in order: formats the D: drive (the legacy configs log and export there), downloads and checks the
 release, checks `@@SERVERNAME` against the computer name and fixes it if needed, caps SQL Server's memory, loads the
@@ -40,7 +47,11 @@ parameter, including the other project's secrets in the account.
 
 ## Consequences
 
-- `make up` needs no polling loop or status flag: Terraform's own wait is the ready signal.
+- `make up` needs no separate polling: `terraform apply` ends when the server is ready.
+- The wait runs on the machine applying Terraform and needs the AWS CLI there. CI never applies, so it never runs it.
+- Measured in the first session: launch to ready in about 9.5 minutes (the script itself 353 s), a re-run in 150 s,
+  and the golden `write-01-create` request replayed on the server with identical results
+  ([measurements](../measurements.md)).
 - The boot script is visible in the plan and versioned with the infrastructure, not baked into the image.
 - The association needs Systems Manager to reach the instance first, through the `ssm` and `ssmmessages` endpoints
   (ADR-0011) and the instance profile; a broken endpoint shows up as a timed-out apply.
